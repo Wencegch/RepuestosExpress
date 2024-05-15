@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">RepuestosExpress</string>
+    <string name="user">Usuario</string>
+    <string name="password">Contraseña</string>
+    <string name="login">Iniciar sesión</string>
+    <string name="sign_in_google">Iniciar sesión con Google</string>
+    <string name="sign_up">Registrarse</string>
+    <string name="ventana_ingreso">Ventana de ingreso</string>
+    <string name="repeatPassword">Repetir contraseña</string>
+    <string name="email">Correo electrónico</string>
+    <string name="required">Requerido</string>
+    <string name="username">Nombre de usuario</string>
+    <string name="error">Hubo un problema, inténtelo más tarde</string>
+    <string name="different_password">Contraseñas distintas</string>
+    <string name="created">creado correctamente</string>
+    <string name="ok_credentials">Credenciales correctas</string>
+    <string name="bad_credentials">Credenciales incorrectas</string>
+    <string name="web_client_id" translatable="false">633452063295-rlh1bp7djjq01o16lfjvint93r45okbu.apps.googleusercontent.com</string>
+    <string name="prefs_file" translatable="false">com.repuestosexpress.PREFERENCE_FILE_KEY</string>
+    <string name="home">Inicio</string>
+    <string name="realizar_pedido">Realizar pedido</string>
+    <string name="cesta">Cesta</string>
+    <string name="sugerencias">Sugerencias</string>
+    <string name="novedades">Novedades</string>
+    <string name="top_ventas">Top ventas</string>
+    <string name="cerrar_sesion">Cerrar sesión</string>
+    <string name="ajustes">Ajustes</string>
+    <string name="logout_confirmation">¿Cerrar la sesión?</string>
+    <string name="accept">Aceptar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="select_theme">Seleccionar tema</string>
+    <string name="familias">Familias</string>
+    <string name="precio_formato" translatable="false">%1$.2f€</string>
+</resources>

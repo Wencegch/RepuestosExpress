@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/btn_Home"
+        android:icon="@drawable/baseline_home"
+        android:title="@string/home"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/btn_Realizar"
+        android:icon="@drawable/baseline_add"
+        android:title="@string/realizar_pedido"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/btn_Cesta"
+        android:icon="@drawable/baseline_shopping_basket"
+        android:title="@string/cesta"
+        app:showAsAction="always" />
+</menu>

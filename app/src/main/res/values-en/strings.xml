@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">RepuestosExpress</string>
+    <string name="user">User</string>
+    <string name="password">Password</string>
+    <string name="login">Log in</string>
+    <string name="sign_in_google">Sign in with Google</string>
+    <string name="sign_up">Sign up</string>
+    <string name="ventana_ingreso">Login window</string>
+    <string name="repeatPassword">Repeat password</string>
+    <string name="email">Email</string>
+    <string name="required">required</string>
+    <string name="username">User name</string>
+    <string name="error">There was a problem, try again later</string>
+    <string name="different_password">Different passwords</string>
+    <string name="created">successfully created</string>
+    <string name="ok_credentials">Correct credentials</string>
+    <string name="bad_credentials">Bad credentials</string>
+    <string name="home">Home</string>
+    <string name="realizar_pedido">Place an order</string>
+    <string name="cesta">Basket</string>
+    <string name="sugerencias">Suggestions</string>
+    <string name="novedades">New products</string>
+    <string name="top_ventas">Top sellers</string>
+    <string name="cerrar_sesion">Log out</string>
+    <string name="ajustes">Settings</string>
+    <string name="logout_confirmation">Are you sure to logout?</string>
+    <string name="accept">Accept</string>
+    <string name="cancel">Cancel</string>
+    <string name="select_theme">Select theme</string>
+    <string name="familias">Families</string>
+</resources>
