@@ -6,15 +6,20 @@
         android:id="@+id/btn_Home"
         android:icon="@drawable/baseline_home"
         android:title="@string/home"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/btn_Realizar"
-        android:icon="@drawable/baseline_add"
+        android:icon="@drawable/baseline_add_shopping_cart"
         android:title="@string/realizar_pedido"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/btn_Cesta"
         android:icon="@drawable/baseline_shopping_basket"
         android:title="@string/cesta"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/btn_pedidos"
+        android:icon="@drawable/baseline_list"
+        android:title="@string/pedidos"
+        app:showAsAction="ifRoom" />
 </menu>

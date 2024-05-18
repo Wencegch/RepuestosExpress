@@ -109,7 +109,7 @@ class Firebase {
             }
     }
 
-    fun obtenerProductosPorVecesPedido(onComplete: (List<Producto>) -> Unit) {
+    fun obtenerProductosTopVentas(onComplete: (List<Producto>) -> Unit) {
         val listaProductos = mutableListOf<Producto>()
 
         referenceProductos

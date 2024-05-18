@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">RepuestosExpress</string>
     <string name="user">User</string>
     <string name="password">Password</string>
     <string name="login">Log in</string>
@@ -29,4 +28,8 @@
     <string name="cancel">Cancel</string>
     <string name="select_theme">Select theme</string>
     <string name="familias">Families</string>
+    <string name="pendientes">"Pending "</string>
+    <string name="finalizados">Finished</string>
+    <string name="pedidos">Orders</string>
+    <string name="productos">Products</string>
 </resources>

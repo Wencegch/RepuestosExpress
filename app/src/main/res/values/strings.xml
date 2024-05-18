@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">RepuestosExpress</string>
+    <string name="app_name" translatable="false">RepuestosExpress</string>
     <string name="user">Usuario</string>
     <string name="password">Contraseña</string>
     <string name="login">Iniciar sesión</string>
@@ -31,4 +31,8 @@
     <string name="select_theme">Seleccionar tema</string>
     <string name="familias">Familias</string>
     <string name="precio_formato" translatable="false">%1$.2f€</string>
+    <string name="pendientes">Pendientes</string>
+    <string name="finalizados">Finalizados</string>
+    <string name="pedidos">Pedidos</string>
+    <string name="productos">Productos</string>
 </resources>

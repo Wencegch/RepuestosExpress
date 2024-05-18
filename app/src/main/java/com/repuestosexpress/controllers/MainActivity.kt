@@ -18,10 +18,11 @@ import com.iamageo.library.onPositive
 import com.iamageo.library.position
 import com.iamageo.library.title
 import com.iamageo.library.type
-import com.repuestosexpress.fragments.CestaFragment
+import com.repuestosexpress.fragments.PedidosFragment
 import com.repuestosexpress.fragments.HomeFragment
 import com.repuestosexpress.R
 import com.repuestosexpress.databinding.ActivityMainBinding
+import com.repuestosexpress.fragments.CestaFragment
 import com.repuestosexpress.fragments.RealizarPedidoFragment
 
 class MainActivity : AppCompatActivity() {
@@ -42,6 +43,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.btn_Home -> replaceFragment(HomeFragment())
                 R.id.btn_Realizar -> replaceFragment(RealizarPedidoFragment())
                 R.id.btn_Cesta -> replaceFragment(CestaFragment())
+                R.id.btn_pedidos -> replaceFragment(PedidosFragment())
             }
             true
         }
@@ -85,7 +87,7 @@ class MainActivity : AppCompatActivity() {
         val currentFragment = supportFragmentManager.findFragmentById(R.id.frame_layout)
 
         // Si el fragmento actual es BookingsFragment o ProfileFragment, cambia al fragmento HomeFragment
-        if (currentFragment is CestaFragment) {
+        if (currentFragment is PedidosFragment) {
             replaceFragment(HomeFragment())
             // Cada vez que se presiona el botón de retroceso, se cambia el elemento seleccionado en el BottomNavigationView al elemento de inicio
             binding.bottomNavigation.selectedItemId = R.id.btn_Home

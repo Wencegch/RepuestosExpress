@@ -22,9 +22,9 @@ class HomeFragment : Fragment() {
     private lateinit var recyclerViewNovedades: RecyclerView
     private lateinit var novedades: ArrayList<Producto>
 
-    private lateinit var productosPorVecesPedidoAdapter: RecyclerAdapterProductos
-    private lateinit var productosPorVecesPedido: ArrayList<Producto>
-    private lateinit var recyclerViewProductosPorVecesPedido: RecyclerView
+    private lateinit var productosTopVentasAdapter: RecyclerAdapterProductos
+    private lateinit var productosTopVentas: ArrayList<Producto>
+    private lateinit var recyclerViewProductosTopVentas: RecyclerView
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -59,16 +59,16 @@ class HomeFragment : Fragment() {
             novedadesAdapter.notifyDataSetChanged()
         }
 
-        productosPorVecesPedido = ArrayList()
-        recyclerViewProductosPorVecesPedido = view.findViewById(R.id.recyclerViewTopVentas)
-        recyclerViewProductosPorVecesPedido.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        productosPorVecesPedidoAdapter = RecyclerAdapterProductos(productosPorVecesPedido)
-        recyclerViewProductosPorVecesPedido.adapter = productosPorVecesPedidoAdapter
+        productosTopVentas = ArrayList()
+        recyclerViewProductosTopVentas = view.findViewById(R.id.recyclerViewTopVentas)
+        recyclerViewProductosTopVentas.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        productosTopVentasAdapter = RecyclerAdapterProductos(productosTopVentas)
+        recyclerViewProductosTopVentas.adapter = productosTopVentasAdapter
 
-        Firebase().obtenerProductosPorVecesPedido{ listaProductosPorVecesPedido->
-            productosPorVecesPedido.clear()
-            productosPorVecesPedido.addAll(listaProductosPorVecesPedido)
-            productosPorVecesPedidoAdapter.notifyDataSetChanged()
+        Firebase().obtenerProductosTopVentas{ listaProductosTopVentas->
+            productosTopVentas.clear()
+            productosTopVentas.addAll(listaProductosTopVentas)
+            productosTopVentasAdapter.notifyDataSetChanged()
         }
 
 
