@@ -15,11 +15,13 @@
         android:theme="@style/Theme.RepuestosExpress"
         tools:targetApi="31">
         <activity
-            android:name=".controllers.ProductosActivity"
-            android:exported="false" />
+            android:name=".controllers.SeleccionCantidadActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
-            android:name=".controllers.RealizarPedidoActivity"
-            android:exported="false" /> <!-- Actividades -->
+            android:name=".controllers.ProductosActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".controllers.PreferencesActivity"
             android:exported="false"

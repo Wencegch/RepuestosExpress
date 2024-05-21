@@ -1,6 +1,8 @@
 package com.repuestosexpress.models
 
-class Producto {
+import java.io.Serializable
+
+class Producto: Serializable {
     private var _id: String = ""
     private var _nombre: String = ""
     private var _precio: Double = 0.0

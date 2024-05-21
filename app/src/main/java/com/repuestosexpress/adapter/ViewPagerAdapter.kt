@@ -15,10 +15,7 @@ import com.repuestosexpress.fragments.PedidosPendientesFragment
 class ViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) : FragmentStateAdapter(fragmentManager, lifecycle) {
 
     // Lista de fragmentos gestionados por el adaptador
-    private val fragmentList = listOf(
-        PedidosPendientesFragment(), // Fragmento de pedidos pendientes
-        PedidosHistorialFragment()   // Fragmento de historial de pedidos
-    )
+    private val fragmentList = listOf(PedidosPendientesFragment(), PedidosHistorialFragment())
 
     /**
      * Obtiene el número total de fragmentos en el ViewPager2.

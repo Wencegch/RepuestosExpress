@@ -4,12 +4,13 @@ import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.repuestosexpress.models.Familia
+import com.repuestosexpress.models.Pedido
 import com.repuestosexpress.models.Producto
 
 class Firebase {
     private var referenceFamilias = FirebaseFirestore.getInstance().collection("Familias")
     private var referenceProductos = FirebaseFirestore.getInstance().collection("Productos")
-
+    private var referencePedidos = FirebaseFirestore.getInstance().collection("Pedidos")
     fun obtenerFamilias(onComplete: (List<Familia>) -> Unit) {
         val listaFamilias = mutableListOf<Familia>()
         referenceFamilias.get().addOnSuccessListener { querySnapshot ->
@@ -137,4 +138,12 @@ class Firebase {
             }
     }
 
+    fun crearPedido(pedido: Pedido) {
+        val datosPedido: MutableMap<String, Any> = HashMap()
+        datosPedido["idProducto"] = pedido.idPedido
+        //datosPedido["cantidad"] = pedido.
+
+        //referencePedidos.add(pedido)
+
+    }
 }

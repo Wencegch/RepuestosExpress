@@ -1,5 +1,6 @@
 package com.repuestosexpress.controllers
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -9,6 +10,7 @@ import com.repuestosexpress.R
 import com.repuestosexpress.adapter.RecyclerAdapterProductos
 import com.repuestosexpress.models.Producto
 import com.repuestosexpress.utils.Firebase
+import com.repuestosexpress.utils.Utils
 
 class ProductosActivity : AppCompatActivity() {
 
@@ -42,13 +44,16 @@ class ProductosActivity : AppCompatActivity() {
             productosAdapter.notifyDataSetChanged()
         }
 
-        productosAdapter.setOnItemLongClickListener(object : RecyclerAdapterProductos.OnItemLongClickListener {
-            override fun onItemLongClick(position: Int) {
+        productosAdapter.setOnItemClickListener(object : RecyclerAdapterProductos.OnItemClickListener {
+            override fun onItemClick(position: Int) {
                 // Actualizar la posición pulsada
                 posicionPulsada = position
                 val productoSeleccionado = productos[posicionPulsada]
-
-
+                Utils.Toast(this@ProductosActivity, "Posición pulsada $posicionPulsada")
+                val intent = Intent(this@ProductosActivity, SeleccionCantidadActivity::class.java).apply {
+                    putExtra("Producto", productoSeleccionado)
+                }
+                startActivity(intent)
             }
         })
     }

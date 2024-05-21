@@ -32,4 +32,6 @@
     <string name="finalizados">Finished</string>
     <string name="pedidos">Orders</string>
     <string name="productos">Products</string>
+    <string name="añadir_cesta">Add to basket</string>
+    <string name="comprar">Buy now</string>
 </resources>

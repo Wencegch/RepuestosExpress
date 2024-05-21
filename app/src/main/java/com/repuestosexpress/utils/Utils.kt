@@ -3,6 +3,7 @@ package com.repuestosexpress.utils
 import android.content.Context
 import com.google.firebase.auth.FirebaseUser
 import com.repuestosexpress.R
+import com.repuestosexpress.models.LineasPedido
 
 class Utils {
     companion object{
@@ -31,5 +32,7 @@ class Utils {
             // Aplica los cambios en el editor de preferencias compartidas para escribir los datos en el archivo de preferencias compartidas de forma asíncrona
             prefs.apply()
         }
+
+        var CONTROLAR_PEDIDOS: ArrayList<LineasPedido> = ArrayList()
     }
 }

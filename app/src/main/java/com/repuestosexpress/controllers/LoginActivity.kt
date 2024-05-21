@@ -89,8 +89,7 @@ class LoginActivity : AppCompatActivity() {
                 val account = task.getResult(ApiException::class.java)
                 if (account != null) {
                     //Si la cuenta no es nula se recogen sus credenciales
-                    val credential: AuthCredential =
-                        GoogleAuthProvider.getCredential(account.idToken, null)
+                    val credential: AuthCredential = GoogleAuthProvider.getCredential(account.idToken, null)
 
                     //Registramos las credenciales en FirebaseAuth
                     FirebaseAuth.getInstance().signInWithCredential(credential)
