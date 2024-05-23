@@ -8,7 +8,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.repuestosexpress.R
+import com.repuestosexpress.models.LineasPedido
 import com.repuestosexpress.models.Producto
+import com.repuestosexpress.utils.Utils
 
 class SeleccionCantidadActivity : AppCompatActivity() {
 
@@ -72,7 +74,9 @@ class SeleccionCantidadActivity : AppCompatActivity() {
         }
 
         btnAgregarCarrito.setOnClickListener {
-            //Utils.CONTROLAR_PEDIDOS.add()
+            Utils.CONTROLAR_PEDIDOS.add(LineasPedido(producto?.id!!, quantity))
+            Utils.Toast(this@SeleccionCantidadActivity, "Producto agregado al carrito")
+            finish()
         }
     }
 

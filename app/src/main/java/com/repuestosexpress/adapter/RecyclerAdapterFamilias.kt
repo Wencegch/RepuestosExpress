@@ -5,7 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
@@ -66,7 +65,7 @@ class RecyclerAdapterFamilias(private var listFamilias: ArrayList<Familia>): Rec
     }
 
     fun getFamilia(pos: Int): Familia {
-        return this.listFamilias.get(pos)
+        return this.listFamilias[pos]
     }
 
     //OnItemClickListener

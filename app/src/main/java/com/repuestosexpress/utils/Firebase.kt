@@ -138,6 +138,30 @@ class Firebase {
             }
     }
 
+    fun obtenerProductoPorId(idProducto: String, onComplete: (Producto?) -> Unit) {
+        referenceProductos.document(idProducto).get().addOnSuccessListener { document ->
+            if (document != null && document.exists()) {
+                val idProducto = document.id
+                val nombre = document.getString("nombre")
+                val precio = document.getDouble("precio")
+                val imgUrl = document.getString("imgUrl")
+                val idFamilia = document.getString("idFamilia")
+
+                if (nombre != null && precio != null && imgUrl != null && idFamilia != null) {
+                    val producto = Producto(idProducto, nombre, precio.toDouble(), imgUrl, idFamilia)
+                    onComplete(producto)
+                } else {
+                    onComplete(null) // Devolver null si falta algún campo
+                }
+            } else {
+                onComplete(null) // Devolver null si no se encuentra ningún documento
+            }
+        }.addOnFailureListener { exception ->
+            Log.d("Error", "$exception")
+            onComplete(null) // Devolver null en caso de error
+        }
+    }
+
     fun crearPedido(pedido: Pedido) {
         val datosPedido: MutableMap<String, Any> = HashMap()
         datosPedido["idProducto"] = pedido.idPedido

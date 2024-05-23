@@ -31,6 +31,7 @@
     <string name="select_theme">Seleccionar tema</string>
     <string name="familias">Familias</string>
     <string name="precio_formato" translatable="false">%1$.2f€</string>
+    <string name="precio_formato2" translatable="false">Precio: %1$.2f€</string>
     <string name="pendientes">Pendientes</string>
     <string name="finalizados">Finalizados</string>
     <string name="pedidos">Pedidos</string>
