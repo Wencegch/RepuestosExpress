@@ -1,11 +1,13 @@
 package com.repuestosexpress.utils
 
 import android.util.Log
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.repuestosexpress.models.Familia
-import com.repuestosexpress.models.Pedido
+import com.repuestosexpress.models.LineasPedido
 import com.repuestosexpress.models.Producto
+import java.util.Calendar
 
 class Firebase {
     private var referenceFamilias = FirebaseFirestore.getInstance().collection("Familias")
@@ -44,7 +46,8 @@ class Firebase {
                     val idFamilia = document.getString("idFamilia")
 
                     if (nombre != null && precio != null && imgUrl != null && idFamilia != null) {
-                        val producto = Producto(idFirebase, nombre, precio.toDouble(), imgUrl, idFamilia)
+                        val producto =
+                            Producto(idFirebase, nombre, precio.toDouble(), imgUrl, idFamilia)
                         listaProductos.add(producto)
                     }
                 }
@@ -58,8 +61,7 @@ class Firebase {
     fun obtenerProductosSugeridos(onComplete: (List<Producto>) -> Unit) {
         val listaProductosSugeridos = mutableListOf<Producto>()
 
-        referenceProductos
-            .whereEqualTo("sugerencias", true)
+        referenceProductos.whereEqualTo("sugerencias", true)
             .get()
             .addOnSuccessListener { querySnapshot ->
                 for (document in querySnapshot.documents) {
@@ -70,7 +72,8 @@ class Firebase {
                     val idFamilia = document.getString("idFamilia")
 
                     if (nombre != null && precio != null && imgUrl != null && idFamilia != null) {
-                        val producto = Producto(idProducto, nombre, precio.toDouble(), imgUrl, idFamilia)
+                        val producto =
+                            Producto(idProducto, nombre, precio.toDouble(), imgUrl, idFamilia)
                         listaProductosSugeridos.add(producto)
                     }
                 }
@@ -85,8 +88,7 @@ class Firebase {
     fun obtenerProductosNovedades(onComplete: (List<Producto>) -> Unit) {
         val listaNovedades = mutableListOf<Producto>()
 
-        referenceProductos
-            .orderBy("fecha", Query.Direction.DESCENDING) // Ordenar por fecha en orden descendente
+        referenceProductos.orderBy("fecha", Query.Direction.DESCENDING) // Ordenar por fecha en orden descendente
             .limit(4) // Limitar la cantidad de resultados a 4
             .get()
             .addOnSuccessListener { querySnapshot ->
@@ -98,7 +100,8 @@ class Firebase {
                     val idFamilia = document.getString("idFamilia")
 
                     if (nombre != null && precio != null && imgUrl != null && idFamilia != null) {
-                        val producto = Producto(idProducto, nombre, precio.toDouble(), imgUrl, idFamilia)
+                        val producto =
+                            Producto(idProducto, nombre, precio.toDouble(), imgUrl, idFamilia)
                         listaNovedades.add(producto)
                     }
                 }
@@ -113,8 +116,7 @@ class Firebase {
     fun obtenerProductosTopVentas(onComplete: (List<Producto>) -> Unit) {
         val listaProductos = mutableListOf<Producto>()
 
-        referenceProductos
-            .orderBy("veces_pedido", Query.Direction.DESCENDING) // Ordenar por veces_pedido de mayor a menor
+        referenceProductos.orderBy("veces_pedido",Query.Direction.DESCENDING) // Ordenar por veces_pedido de mayor a menor
             .limit(2) // Limitar la cantidad de resultados a 2
             .get()
             .addOnSuccessListener { querySnapshot ->
@@ -126,7 +128,8 @@ class Firebase {
                     val idFamilia = document.getString("idFamilia")
 
                     if (nombre != null && precio != null && imgUrl != null && idFamilia != null) {
-                        val producto = Producto(idProducto, nombre, precio.toDouble(), imgUrl, idFamilia)
+                        val producto =
+                            Producto(idProducto, nombre, precio.toDouble(), imgUrl, idFamilia)
                         listaProductos.add(producto)
                     }
                 }
@@ -148,7 +151,8 @@ class Firebase {
                 val idFamilia = document.getString("idFamilia")
 
                 if (nombre != null && precio != null && imgUrl != null && idFamilia != null) {
-                    val producto = Producto(idProducto, nombre, precio.toDouble(), imgUrl, idFamilia)
+                    val producto =
+                        Producto(idProducto, nombre, precio.toDouble(), imgUrl, idFamilia)
                     onComplete(producto)
                 } else {
                     onComplete(null) // Devolver null si falta algún campo
@@ -162,12 +166,54 @@ class Firebase {
         }
     }
 
-    fun crearPedido(pedido: Pedido) {
+    fun crearPedido(lineasPedidos: ArrayList<LineasPedido>, user: String) {
         val datosPedido: MutableMap<String, Any> = HashMap()
-        datosPedido["idProducto"] = pedido.idPedido
-        //datosPedido["cantidad"] = pedido.
+        val fechaActual = Calendar.getInstance().time
 
-        //referencePedidos.add(pedido)
+        datosPedido["usuario"] = user
+        datosPedido["fecha"] = fechaActual
+        datosPedido["estado"] = "Pendiente"
 
+        referencePedidos
+            .add(datosPedido)
+            .addOnSuccessListener { documentReference ->
+                val pedidoId = documentReference.id
+
+                // Crear una subcolección "lineas" dentro del pedido
+                for (linea in lineasPedidos) {
+                    val datosLinea: MutableMap<String, Any> = HashMap()
+                    datosLinea["idProducto"] = linea.idProducto
+                    datosLinea["cantidad"] = linea.cantidad
+
+                    // Añadir cada línea de pedido como documento en la subcolección "lineas" del pedido creado
+                    referencePedidos
+                        .document(pedidoId)
+                        .collection("lineas")
+                        .add(datosLinea)
+                        .addOnSuccessListener { lineDocumentReference ->
+                            Log.d("Linea", "Linea creada con ID: ${lineDocumentReference.id} en pedido con ID: $pedidoId")
+                        }
+                        .addOnFailureListener { exception ->
+                            Log.e("Error", "Error al crear la línea en pedido con ID: $pedidoId, excepción: $exception")
+                        }
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.e("Error", "Error al crear el pedido: $exception")
+            }
+
+        // Recorremos todas las lineas
+        for (pedido in lineasPedidos) {
+            // Actualizamos las veces que se pidió un producto
+            referenceProductos.document(pedido.idProducto)
+                .update("veces_pedido", FieldValue.increment(pedido.cantidad.toLong()))
+                .addOnSuccessListener {
+                    Log.d("Pedido", "Producto actualizado con éxito para el producto: ${pedido.idProducto}")
+                    // Cuando se acabe no hará nada puesto que no es necesario que el usuario espere a esto
+                }
+                .addOnFailureListener { exception ->
+                    Log.e("Error", "Error al actualizar el producto ${pedido.idProducto}: $exception")
+                }
+        }
     }
 }

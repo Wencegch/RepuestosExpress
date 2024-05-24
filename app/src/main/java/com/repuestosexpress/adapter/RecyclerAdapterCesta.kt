@@ -15,8 +15,8 @@ import com.repuestosexpress.utils.Firebase
 class RecyclerAdapterCesta(private var listLineasPedido: ArrayList<LineasPedido>) : RecyclerView.Adapter<RecyclerAdapterCesta.ViewHolder>() {
 
     private lateinit var progressDrawable: CircularProgressDrawable
-    private lateinit var onItemClickListener: OnItemClickListener
-    private lateinit var onItemLongClickListener: RecyclerAdapterProductos.OnItemLongClickListener
+    private var onItemClickListener: OnItemClickListener? = null
+    private var onItemLongClickListener: RecyclerAdapterProductos.OnItemLongClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_linea_pedido, parent, false)
@@ -31,7 +31,7 @@ class RecyclerAdapterCesta(private var listLineasPedido: ArrayList<LineasPedido>
             val precioUnitario = lineasPedi?.precio ?: 0.0
             val precioTotal = precioUnitario * lineasPedido.cantidad
             holder.precioLinea.text = holder.itemView.context.getString(R.string.precio_formato2, precioTotal)
-            holder.cantidadLinea.text = "Cantidad: ${lineasPedido.cantidad}"
+            holder.cantidadLinea.text = holder.itemView.context.getString(R.string.cantidad) + lineasPedido.cantidad
             Glide.with(holder.itemView.context)
                 .load(lineasPedi?.imgUrl)
                 .placeholder(progressDrawable)
@@ -47,12 +47,12 @@ class RecyclerAdapterCesta(private var listLineasPedido: ArrayList<LineasPedido>
         progressDrawable.start()
 
         holder.itemView.setOnClickListener {
-            onItemClickListener.onItemClick(position)
+            onItemClickListener?.onItemClick(position)
         }
 
         // Agregar OnLongClickListener para borrar la familia
         holder.itemView.setOnLongClickListener {
-            onItemLongClickListener.onItemLongClick(position)
+            onItemLongClickListener?.onItemLongClick(position)
             true
         }
     }

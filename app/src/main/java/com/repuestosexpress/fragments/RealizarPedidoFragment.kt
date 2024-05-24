@@ -28,7 +28,6 @@ class RealizarPedidoFragment : Fragment() {
         // Inflar el diseño del fragmento
         val view = inflater.inflate(R.layout.fragment_realizar_pedido, container, false)
 
-
         // Inicializar la lista de familias y el adaptador
         familias = ArrayList()
         recyclerView = view.findViewById(R.id.recyclerViewFamilias)

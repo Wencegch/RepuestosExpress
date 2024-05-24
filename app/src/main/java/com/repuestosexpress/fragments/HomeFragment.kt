@@ -70,8 +70,5 @@ class HomeFragment : Fragment() {
             productosTopVentas.addAll(listaProductosTopVentas)
             productosTopVentasAdapter.notifyDataSetChanged()
         }
-
-
     }
-
 }

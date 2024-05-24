@@ -65,8 +65,8 @@ class MainActivity : AppCompatActivity() {
             R.id.btn_LogOut ->
                 BeautifulDialog.build(this)
                     .title(getString(R.string.logout_confirmation), titleColor = R.color.black)
-                    .description("")
-                    .type(type = BeautifulDialog.TYPE.NONE)
+                    .description(getString(R.string.logout_description))
+                    .type(type = BeautifulDialog.TYPE.INFO)
                     .position(BeautifulDialog.POSITIONS.CENTER)
                     .onPositive(text = getString(R.string.accept), shouldIDismissOnClick = true) {
                         FirebaseAuth.getInstance().signOut()
@@ -87,7 +87,7 @@ class MainActivity : AppCompatActivity() {
         val currentFragment = supportFragmentManager.findFragmentById(R.id.frame_layout)
 
         // Si el fragmento actual es BookingsFragment o ProfileFragment, cambia al fragmento HomeFragment
-        if (currentFragment is PedidosFragment) {
+        if (currentFragment is PedidosFragment || currentFragment is CestaFragment || currentFragment is RealizarPedidoFragment) {
             replaceFragment(HomeFragment())
             // Cada vez que se presiona el botón de retroceso, se cambia el elemento seleccionado en el BottomNavigationView al elemento de inicio
             binding.bottomNavigation.selectedItemId = R.id.btn_Home
@@ -106,26 +106,12 @@ class MainActivity : AppCompatActivity() {
     }
     override fun onResume() {
         super.onResume()
-
         loadPreferences()
-        val aux = intent
-        val action = aux.getStringExtra("action")
-        if (action != null) {
-            if (action == "home") {
-                //al hacer esto directamente se va al listener implementado arriba, no repetimos codigo
-                //y no da el fallo que daba(estabe en fragment home y salia pulsado el boton de fragment cesta)
-                binding.bottomNavigation.selectedItemId = R.id.btn_Home
-            } else {
-                binding.bottomNavigation.selectedItemId = R.id.btn_Cesta
-            }
-        }
-
     }
 
     // Cierra la sesión del usuario y borra los ajustes de ese inicio de sesión para evitar entrar directamente
     private fun exit() {
-        val prefs =
-            this.getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
+        val prefs = this.getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
         prefs.clear()
         prefs.apply()
         // Navega de vuelta a la actividad de inicio de sesión
@@ -142,5 +128,4 @@ class MainActivity : AppCompatActivity() {
             "Night" -> getDelegate().localNightMode = AppCompatDelegate.MODE_NIGHT_YES
         }
     }
-
 }

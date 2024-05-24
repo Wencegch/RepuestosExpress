@@ -10,7 +10,6 @@ import com.repuestosexpress.R
 import com.repuestosexpress.adapter.RecyclerAdapterProductos
 import com.repuestosexpress.models.Producto
 import com.repuestosexpress.utils.Firebase
-import com.repuestosexpress.utils.Utils
 
 class ProductosActivity : AppCompatActivity() {
 
@@ -49,7 +48,6 @@ class ProductosActivity : AppCompatActivity() {
                 // Actualizar la posición pulsada
                 posicionPulsada = position
                 val productoSeleccionado = productos[posicionPulsada]
-                Utils.Toast(this@ProductosActivity, "Posición pulsada $posicionPulsada")
                 val intent = Intent(this@ProductosActivity, SeleccionCantidadActivity::class.java).apply {
                     putExtra("Producto", productoSeleccionado)
                 }

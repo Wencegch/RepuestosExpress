@@ -9,7 +9,6 @@ import com.repuestosexpress.R
 
 class PedidosHistorialFragment : Fragment() {
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

@@ -34,5 +34,13 @@ class Utils {
         }
 
         var CONTROLAR_PEDIDOS: ArrayList<LineasPedido> = ArrayList()
+
+        fun getPreferences(cont: Context): String {
+            val prefs = cont.applicationContext.getSharedPreferences(
+                cont.getString(R.string.prefs_file),  // Nombre del archivo de preferencias
+                Context.MODE_PRIVATE  // Modo de acceso a las preferencias
+            )
+            return prefs.getString("UID", "").toString()
+        }
     }
 }

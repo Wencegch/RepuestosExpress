@@ -5,18 +5,21 @@ class Pedido {
     private var _usuario: String = ""
     private var _estado: String = ""
     private var _idPedido: String = ""
+    private var _fecha: String = ""
 
-    constructor(id: String, usuario: String, estado: String, idPedido: String) {
+    constructor(id: String, usuario: String, estado: String, idPedido: String, fecha: String) {
         _id = id
         _usuario = usuario
         _estado = estado
         _idPedido = idPedido
+        _fecha = fecha
     }
 
-    constructor(usuario: String, estado: String, idPedido: String) {
+    constructor(usuario: String, estado: String, idPedido: String, fecha: String) {
         _usuario = usuario
         _estado = estado
         _idPedido = idPedido
+        _fecha = fecha
     }
 
     var id: String
@@ -42,4 +45,11 @@ class Pedido {
         set(value) {
             _idPedido = value
         }
+
+    var fecha: String
+        get() = _fecha
+        set(value) {
+            _fecha = value
+        }
+
 }

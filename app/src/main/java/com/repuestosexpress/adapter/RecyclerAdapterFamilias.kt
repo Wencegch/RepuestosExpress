@@ -17,7 +17,6 @@ class RecyclerAdapterFamilias(private var listFamilias: ArrayList<Familia>): Rec
     private lateinit var onItemClickListener: OnItemClickListener
     private lateinit var onItemLongClickListener: RecyclerAdapterProductos.OnItemLongClickListener
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_familia, parent, false)
         return ViewHolder(view)

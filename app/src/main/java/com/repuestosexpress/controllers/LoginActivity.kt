@@ -30,13 +30,8 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_login)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.preferences_container)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+
         btnLogingWithEmail = findViewById(R.id.btn_Login)
         btnLogingGoogle = findViewById(R.id.btn_singGoogle)
         btnRegisterWithEmail = findViewById(R.id.btn_Registrar)
@@ -62,10 +57,9 @@ class LoginActivity : AppCompatActivity() {
      */
     override fun onStart() {
         super.onStart()
-
-        val prefs: SharedPreferences =
-            getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
+        val prefs: SharedPreferences = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
         val username: String? = prefs.getString("name", "")
+
         if (!username?.trim().equals("")) {
             mainIntent()
             this.finish()

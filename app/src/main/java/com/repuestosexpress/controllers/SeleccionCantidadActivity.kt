@@ -1,6 +1,7 @@
 package com.repuestosexpress.controllers
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -10,6 +11,7 @@ import com.bumptech.glide.Glide
 import com.repuestosexpress.R
 import com.repuestosexpress.models.LineasPedido
 import com.repuestosexpress.models.Producto
+import com.repuestosexpress.utils.Firebase
 import com.repuestosexpress.utils.Utils
 
 class SeleccionCantidadActivity : AppCompatActivity() {
@@ -20,8 +22,10 @@ class SeleccionCantidadActivity : AppCompatActivity() {
     private lateinit var buttonDecrease: Button
     private lateinit var btnComprar: Button
     private lateinit var btnAgregarCarrito: Button
+    private lateinit var txtPrecio: TextView
     private lateinit var textQuantity: TextView
     private var quantity: Int = 1
+    private var producto: Producto? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,8 +38,9 @@ class SeleccionCantidadActivity : AppCompatActivity() {
         btnAgregarCarrito = findViewById(R.id.btn_AñadirCesta)
         textQuantity = findViewById(R.id.textQuantityLabel)
         imageProduct = findViewById(R.id.imageViewSeleccionCantidad)
+        txtPrecio = findViewById(R.id.txtPrecioCantidad)
 
-        val producto = intent.getSerializableExtra("Producto") as? Producto
+        producto = intent.getSerializableExtra("Producto") as? Producto
 
         // Configuración de CircularProgressDrawable
         progressDrawable = CircularProgressDrawable(this).apply {
@@ -55,32 +60,45 @@ class SeleccionCantidadActivity : AppCompatActivity() {
         }
 
         updateQuantityDisplay() // Inicializa la cantidad mostrada
+        updatePriceDisplay() // Inicializa el precio mostrado
 
         // Configurar listeners de los botones
         buttonIncrease.setOnClickListener {
             quantity++
             updateQuantityDisplay()
+            updatePriceDisplay()
         }
 
         buttonDecrease.setOnClickListener {
             if (quantity > 1) {
                 quantity--
                 updateQuantityDisplay()
+                updatePriceDisplay()
             }
         }
 
         btnComprar.setOnClickListener {
-
+            val userUID = Utils.getPreferences(this)
+            Utils.CONTROLAR_PEDIDOS.clear()
+            Utils.CONTROLAR_PEDIDOS.add(LineasPedido(producto?.id!!, quantity))
+            Log.d("CONTROLAR_PEDIDOS", userUID)
+            Firebase().crearPedido(Utils.CONTROLAR_PEDIDOS, userUID)
+            finish()
         }
 
         btnAgregarCarrito.setOnClickListener {
             Utils.CONTROLAR_PEDIDOS.add(LineasPedido(producto?.id!!, quantity))
-            Utils.Toast(this@SeleccionCantidadActivity, "Producto agregado al carrito")
+            Utils.Toast(this@SeleccionCantidadActivity, getString(R.string.producto_añadido))
             finish()
         }
     }
 
     private fun updateQuantityDisplay() {
-        textQuantity.text = "Cantidad: $quantity"
+        textQuantity.text = getString(R.string.cantidad) + quantity
+    }
+
+    private fun updatePriceDisplay() {
+        val precio = quantity * producto?.precio!!
+        txtPrecio.text = getString(R.string.precio_formato2, precio)
     }
 }

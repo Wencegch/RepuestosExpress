@@ -28,10 +28,14 @@
     <string name="cancel">Cancel</string>
     <string name="select_theme">Select theme</string>
     <string name="familias">Families</string>
+    <string name="precio_formato2">Price: %1$.2f€</string>
     <string name="pendientes">"Pending "</string>
     <string name="finalizados">Finished</string>
     <string name="pedidos">Orders</string>
     <string name="productos">Products</string>
     <string name="añadir_cesta">Add to basket</string>
     <string name="comprar">Buy now</string>
+    <string name="cantidad">"Quantity: "</string>
+    <string name="producto_añadido">Product added to cart</string>
+    <string name="logout_description">Exit the application and return to the registration page.</string>
 </resources>
