@@ -8,6 +8,13 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
+import com.iamageo.library.BeautifulDialog
+import com.iamageo.library.description
+import com.iamageo.library.onNegative
+import com.iamageo.library.onPositive
+import com.iamageo.library.position
+import com.iamageo.library.title
+import com.iamageo.library.type
 import com.repuestosexpress.R
 import com.repuestosexpress.models.LineasPedido
 import com.repuestosexpress.models.Producto
@@ -78,12 +85,20 @@ class SeleccionCantidadActivity : AppCompatActivity() {
         }
 
         btnComprar.setOnClickListener {
-            val userUID = Utils.getPreferences(this)
-            Utils.CONTROLAR_PEDIDOS.clear()
-            Utils.CONTROLAR_PEDIDOS.add(LineasPedido(producto?.id!!, quantity))
-            Log.d("CONTROLAR_PEDIDOS", userUID)
-            Firebase().crearPedido(Utils.CONTROLAR_PEDIDOS, userUID)
-            finish()
+            BeautifulDialog.build(this)
+                .title(getString(R.string.realizar_pedido), titleColor = R.color.black)
+                .description(getString(R.string.confirmacion_realizar_pedido))
+                .type(type = BeautifulDialog.TYPE.INFO)
+                .position(BeautifulDialog.POSITIONS.CENTER)
+                .onPositive(text = getString(R.string.aceptar), shouldIDismissOnClick = true) {
+                    val userUID = Utils.getPreferences(this)
+                    Utils.CONTROLAR_PEDIDOS.clear()
+                    Utils.CONTROLAR_PEDIDOS.add(LineasPedido(producto?.id!!, quantity))
+                    Log.d("CONTROLAR_PEDIDOS", userUID)
+                    Firebase().crearPedido(Utils.CONTROLAR_PEDIDOS, userUID)
+                    finish()
+                }
+                .onNegative(text = getString(R.string.cancelar)) {}
         }
 
         btnAgregarCarrito.setOnClickListener {

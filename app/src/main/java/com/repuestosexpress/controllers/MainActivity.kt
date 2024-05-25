@@ -62,18 +62,18 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
             }
 
-            R.id.btn_LogOut ->
+            R.id.btn_LogOut -> {
                 BeautifulDialog.build(this)
                     .title(getString(R.string.logout_confirmation), titleColor = R.color.black)
                     .description(getString(R.string.logout_description))
                     .type(type = BeautifulDialog.TYPE.INFO)
                     .position(BeautifulDialog.POSITIONS.CENTER)
-                    .onPositive(text = getString(R.string.accept), shouldIDismissOnClick = true) {
+                    .onPositive(text = getString(R.string.aceptar), shouldIDismissOnClick = true) {
                         FirebaseAuth.getInstance().signOut()
                         exit()
                     }
-                    .onNegative(text = getString(R.string.cancel)) {}
-
+                    .onNegative(text = getString(R.string.cancelar)) {}
+            }
         }
         return super.onOptionsItemSelected(item)
     }

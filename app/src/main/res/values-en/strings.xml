@@ -24,8 +24,8 @@
     <string name="cerrar_sesion">Log out</string>
     <string name="ajustes">Settings</string>
     <string name="logout_confirmation">Are you sure to logout?</string>
-    <string name="accept">Accept</string>
-    <string name="cancel">Cancel</string>
+    <string name="aceptar">Accept</string>
+    <string name="cancelar">Cancel</string>
     <string name="select_theme">Select theme</string>
     <string name="familias">Families</string>
     <string name="precio_formato2">Price: %1$.2f€</string>
@@ -38,4 +38,10 @@
     <string name="cantidad">"Quantity: "</string>
     <string name="producto_añadido">Product added to cart</string>
     <string name="logout_description">Exit the application and return to the registration page.</string>
+    <string name="confirmacion_realizar_pedido">Are you sure you want to place this order?</string>
+    <string name="eliminar">Delete</string>
+    <string name="borrar_producto">Delete product</string>
+    <string name="informacion_borrar_producto">You want to remove this product from the list</string>
+    <string name="tramitar_pedido">Process order</string>
+    <string name="cesta_vacia">No products added to your basket</string>
 </resources>

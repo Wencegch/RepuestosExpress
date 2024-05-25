@@ -9,10 +9,12 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.repuestosexpress.R
+import com.repuestosexpress.fragments.CestaFragment
 import com.repuestosexpress.models.LineasPedido
 import com.repuestosexpress.utils.Firebase
 
-class RecyclerAdapterCesta(private var listLineasPedido: ArrayList<LineasPedido>) : RecyclerView.Adapter<RecyclerAdapterCesta.ViewHolder>() {
+class RecyclerAdapterCesta(private var listLineasPedido: ArrayList<LineasPedido>, private val fragment: CestaFragment
+) : RecyclerView.Adapter<RecyclerAdapterCesta.ViewHolder>() {
 
     private lateinit var progressDrawable: CircularProgressDrawable
     private var onItemClickListener: OnItemClickListener? = null
@@ -39,7 +41,6 @@ class RecyclerAdapterCesta(private var listLineasPedido: ArrayList<LineasPedido>
                 .into(holder.imagenLinea)
         }
 
-        // Configuración del CircularProgressDrawable
         progressDrawable = CircularProgressDrawable(holder.itemView.context)
         progressDrawable.strokeWidth = 10f
         progressDrawable.setStyle(CircularProgressDrawable.LARGE)
@@ -50,10 +51,16 @@ class RecyclerAdapterCesta(private var listLineasPedido: ArrayList<LineasPedido>
             onItemClickListener?.onItemClick(position)
         }
 
-        // Agregar OnLongClickListener para borrar la familia
         holder.itemView.setOnLongClickListener {
             onItemLongClickListener?.onItemLongClick(position)
             true
+        }
+
+        holder.textoEliminar.setOnClickListener {
+            listLineasPedido.removeAt(position)
+            notifyItemRemoved(position)
+            notifyItemRangeChanged(position, itemCount)
+            fragment.mostrarPantalla()
         }
     }
 
@@ -65,6 +72,7 @@ class RecyclerAdapterCesta(private var listLineasPedido: ArrayList<LineasPedido>
         val nombreLinea: TextView = itemView.findViewById(R.id.txtNombreProductoLinea)
         val precioLinea: TextView = itemView.findViewById(R.id.txtPrecioProductoLinea)
         val cantidadLinea: TextView = itemView.findViewById(R.id.txtCantidadProducto)
+        val textoEliminar: TextView = itemView.findViewById(R.id.txtEliminar)
         val imagenLinea: ImageView = itemView.findViewById(R.id.imageViewProductoLinea)
     }
 
@@ -72,7 +80,6 @@ class RecyclerAdapterCesta(private var listLineasPedido: ArrayList<LineasPedido>
         return this.listLineasPedido[pos]
     }
 
-    // OnItemClickListener
     interface OnItemClickListener {
         fun onItemClick(position: Int)
     }
@@ -81,7 +88,6 @@ class RecyclerAdapterCesta(private var listLineasPedido: ArrayList<LineasPedido>
         onItemClickListener = listener
     }
 
-    // OnItemLongClickListener
     interface OnItemLongClickListener : RecyclerAdapterProductos.OnItemLongClickListener {
         override fun onItemLongClick(position: Int)
     }
