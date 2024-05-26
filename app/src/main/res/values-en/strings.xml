@@ -31,7 +31,7 @@
     <string name="precio_formato2">Price: %1$.2f€</string>
     <string name="pendientes">"Pending "</string>
     <string name="finalizados">Finished</string>
-    <string name="pedidos">Orders</string>
+    <string name="mis_pedidos">My orders</string>
     <string name="productos">Products</string>
     <string name="añadir_cesta">Add to basket</string>
     <string name="comprar">Buy now</string>
@@ -44,4 +44,7 @@
     <string name="informacion_borrar_producto">You want to remove this product from the list</string>
     <string name="tramitar_pedido">Process order</string>
     <string name="cesta_vacia">No products added to your basket</string>
+    <string name="pedido_realizado">ORDER PLACED</string>
+    <string name="estado">Status</string>
+    <string name="pedido">Order</string>
 </resources>

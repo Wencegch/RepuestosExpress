@@ -1,6 +1,8 @@
 package com.repuestosexpress.fragments
 
+import android.app.Activity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,8 +11,16 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.iamageo.library.BeautifulDialog
+import com.iamageo.library.description
+import com.iamageo.library.onNegative
+import com.iamageo.library.onPositive
+import com.iamageo.library.position
+import com.iamageo.library.title
+import com.iamageo.library.type
 import com.repuestosexpress.R
 import com.repuestosexpress.adapter.RecyclerAdapterCesta
+import com.repuestosexpress.models.LineasPedido
 import com.repuestosexpress.utils.Firebase
 import com.repuestosexpress.utils.Utils
 
@@ -40,6 +50,23 @@ class CestaFragment : Fragment() {
         recyclerView.adapter = cestaAdapter
 
         mostrarPantalla()
+
+        btnTramitarPedido.setOnClickListener {
+                BeautifulDialog.build(requireContext() as Activity)
+                    .title(getString(R.string.realizar_pedido), titleColor = R.color.black)
+                    .description(getString(R.string.confirmacion_realizar_pedido))
+                    .type(type = BeautifulDialog.TYPE.INFO)
+                    .position(BeautifulDialog.POSITIONS.CENTER)
+                    .onPositive(text = getString(R.string.aceptar), shouldIDismissOnClick = true) {
+                        val userUID = Utils.getPreferences(requireContext())
+                        Firebase().crearPedido(Utils.CONTROLAR_PEDIDOS, userUID)
+                        Utils.Toast(requireContext(), getString(R.string.pedido_realizado))
+                        Utils.CONTROLAR_PEDIDOS.clear()
+                        mostrarPantalla()
+                    }
+                    .onNegative(text = getString(R.string.cancelar)) {}
+
+        }
     }
 
     fun calcularTotal(onTotalCalculated: (Double) -> Unit) {

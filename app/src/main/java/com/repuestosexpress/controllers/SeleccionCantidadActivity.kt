@@ -96,6 +96,7 @@ class SeleccionCantidadActivity : AppCompatActivity() {
                     Utils.CONTROLAR_PEDIDOS.add(LineasPedido(producto?.id!!, quantity))
                     Log.d("CONTROLAR_PEDIDOS", userUID)
                     Firebase().crearPedido(Utils.CONTROLAR_PEDIDOS, userUID)
+                    Utils.Toast(this@SeleccionCantidadActivity, getString(R.string.pedido_realizado))
                     finish()
                 }
                 .onNegative(text = getString(R.string.cancelar)) {}

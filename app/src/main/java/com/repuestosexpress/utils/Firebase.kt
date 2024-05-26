@@ -6,7 +6,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.repuestosexpress.models.Familia
 import com.repuestosexpress.models.LineasPedido
+import com.repuestosexpress.models.Pedido
 import com.repuestosexpress.models.Producto
+import java.text.SimpleDateFormat
 import java.util.Calendar
 
 class Firebase {
@@ -215,5 +217,26 @@ class Firebase {
                     Log.e("Error", "Error al actualizar el producto ${pedido.idProducto}: $exception")
                 }
         }
+    }
+
+    fun obtenerPedidosUsuario(user: String, onComplete: (List<Pedido>) -> Unit) {
+        val listaPedidos = mutableListOf<Pedido>()
+        referencePedidos.whereEqualTo("usuario", user).get()
+            .addOnSuccessListener { querySnapshot ->
+                for (document in querySnapshot.documents) {
+                    val idPedido = document.id
+                    val estado = document.getString("estado")
+                    val fecha = document.getDate("fecha")
+
+                    if (estado != null && fecha != null) {
+                        val pedido = Pedido(user, estado, idPedido, fecha)
+                        listaPedidos.add(pedido)
+                    }
+                }
+                onComplete(listaPedidos)
+            }.addOnFailureListener { exception ->
+                Log.d("Error", "$exception")
+                onComplete(emptyList()) // Devolver una lista vacía en caso de error
+            }
     }
 }

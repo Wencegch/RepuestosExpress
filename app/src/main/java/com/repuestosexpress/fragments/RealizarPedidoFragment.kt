@@ -20,11 +20,7 @@ class RealizarPedidoFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var familias: ArrayList<Familia>
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflar el diseño del fragmento
         val view = inflater.inflate(R.layout.fragment_realizar_pedido, container, false)
 
