@@ -68,11 +68,11 @@ class MainActivity : AppCompatActivity() {
                     .description(getString(R.string.logout_description))
                     .type(type = BeautifulDialog.TYPE.INFO)
                     .position(BeautifulDialog.POSITIONS.CENTER)
-                    .onPositive(text = getString(R.string.aceptar), shouldIDismissOnClick = true) {
+                    .onPositive(text = getString(android.R.string.ok), shouldIDismissOnClick = true) {
                         FirebaseAuth.getInstance().signOut()
                         exit()
                     }
-                    .onNegative(text = getString(R.string.cancelar)) {}
+                    .onNegative(text = getString(android.R.string.cancel)) {}
             }
         }
         return super.onOptionsItemSelected(item)

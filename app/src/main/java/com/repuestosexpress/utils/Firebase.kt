@@ -8,7 +8,6 @@ import com.repuestosexpress.models.Familia
 import com.repuestosexpress.models.LineasPedido
 import com.repuestosexpress.models.Pedido
 import com.repuestosexpress.models.Producto
-import java.text.SimpleDateFormat
 import java.util.Calendar
 
 class Firebase {
@@ -40,7 +39,6 @@ class Firebase {
         referenceProductos.whereEqualTo("idFamilia", idFamilia).get()
             .addOnSuccessListener { querySnapshot ->
                 for (document in querySnapshot.documents) {
-                    Log.d("Id Firebase", document.id)
                     val idFirebase = document.id
                     val nombre = document.getString("nombre")
                     val precio = document.getDouble("precio")
@@ -205,23 +203,73 @@ class Firebase {
             }
 
         // Recorremos todas las lineas
-        for (pedido in lineasPedidos) {
+        for (lineaPedido in lineasPedidos) {
             // Actualizamos las veces que se pidió un producto
-            referenceProductos.document(pedido.idProducto)
-                .update("veces_pedido", FieldValue.increment(pedido.cantidad.toLong()))
+            referenceProductos.document(lineaPedido.idProducto)
+                .update("veces_pedido", FieldValue.increment(lineaPedido.cantidad.toLong()))
                 .addOnSuccessListener {
-                    Log.d("Pedido", "Producto actualizado con éxito para el producto: ${pedido.idProducto}")
+                    Log.d("Producto update", "Producto actualizado con éxito con el ID: ${lineaPedido.idProducto}")
                     // Cuando se acabe no hará nada puesto que no es necesario que el usuario espere a esto
                 }
                 .addOnFailureListener { exception ->
-                    Log.e("Error", "Error al actualizar el producto ${pedido.idProducto}: $exception")
+                    Log.e("Error", "Error al actualizar el producto ${lineaPedido.idProducto}: $exception")
                 }
         }
+        Utils.CONTROLAR_PEDIDOS.clear()
     }
 
-    fun obtenerPedidosUsuario(user: String, onComplete: (List<Pedido>) -> Unit) {
+    //Para un pedido individual
+    fun crearPedidoLinea(lineaPedido: LineasPedido, user: String) {
+        val datosPedido: MutableMap<String, Any> = HashMap()
+        val fechaActual = Calendar.getInstance().time
+
+        datosPedido["usuario"] = user
+        datosPedido["fecha"] = fechaActual
+        datosPedido["estado"] = "Pendiente"
+
+        referencePedidos
+            .add(datosPedido)
+            .addOnSuccessListener { documentReference ->
+                val pedidoId = documentReference.id
+
+                // Crear una subcolección "lineas" dentro del pedido
+                val datosLinea: MutableMap<String, Any> = HashMap()
+                datosLinea["idProducto"] = lineaPedido.idProducto
+                datosLinea["cantidad"] = lineaPedido.cantidad
+
+                // Añadir la línea de pedido como documento en la subcolección "lineas" del pedido creado
+                referencePedidos
+                    .document(pedidoId)
+                    .collection("lineas")
+                    .add(datosLinea)
+                    .addOnSuccessListener { lineDocumentReference ->
+                        Log.d("Linea", "Linea creada con ID: ${lineDocumentReference.id} en pedido con ID: $pedidoId")
+                    }
+                    .addOnFailureListener { exception ->
+                        Log.e("Error", "Error al crear la línea en pedido con ID: $pedidoId, excepción: $exception")
+                    }
+
+                // Actualizar las veces que se pidió un producto
+                referenceProductos.document(lineaPedido.idProducto)
+                    .update("veces_pedido", FieldValue.increment(lineaPedido.cantidad.toLong()))
+                    .addOnSuccessListener {
+                        Log.d("Producto update", "Producto actualizado con éxito con el ID: ${lineaPedido.idProducto}")
+                    }
+                    .addOnFailureListener { exception ->
+                        Log.e("Error", "Error al actualizar el producto ${lineaPedido.idProducto}: $exception")
+                    }
+            }
+            .addOnFailureListener { exception ->
+                Log.e("Error", "Error al crear el pedido: $exception")
+            }
+    }
+
+    fun obtenerPedidosPendientes(user: String, onComplete: (List<Pedido>) -> Unit) {
         val listaPedidos = mutableListOf<Pedido>()
-        referencePedidos.whereEqualTo("usuario", user).get()
+        referencePedidos
+            .whereEqualTo("usuario", user)
+            .whereEqualTo("estado", "Pendiente")
+            .get()
             .addOnSuccessListener { querySnapshot ->
                 for (document in querySnapshot.documents) {
                     val idPedido = document.id
@@ -229,14 +277,55 @@ class Firebase {
                     val fecha = document.getDate("fecha")
 
                     if (estado != null && fecha != null) {
-                        val pedido = Pedido(user, estado, idPedido, fecha)
+                        val pedido = Pedido(idPedido, user, estado, fecha)
                         listaPedidos.add(pedido)
                     }
                 }
                 onComplete(listaPedidos)
-            }.addOnFailureListener { exception ->
+            }
+            .addOnFailureListener { exception ->
                 Log.d("Error", "$exception")
                 onComplete(emptyList()) // Devolver una lista vacía en caso de error
             }
     }
+
+    fun obtenerPedidosFinalizados(user: String, onComplete: (List<Pedido>) -> Unit) {
+        val listaPedidos = mutableListOf<Pedido>()
+        referencePedidos
+            .whereEqualTo("usuario", user)
+            .whereEqualTo("estado", "Finalizado")
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                for (document in querySnapshot.documents) {
+                    val idPedido = document.id
+                    val estado = document.getString("estado")
+                    val fecha = document.getDate("fecha")
+
+                    if (estado != null && fecha != null) {
+                        val pedido = Pedido(idPedido, user, estado, fecha)
+                        listaPedidos.add(pedido)
+                    }
+                }
+                onComplete(listaPedidos)
+            }
+            .addOnFailureListener { exception ->
+                Log.d("Error", "$exception")
+                onComplete(emptyList()) // Devolver una lista vacía en caso de error
+            }
+    }
+
+    fun borrarPedidoPorId(pedidoId: String, onComplete: (Boolean) -> Unit) {
+        // Obtener la referencia al documento del pedido por su ID
+        referencePedidos.document(pedidoId)
+            .delete()
+            .addOnSuccessListener {
+                Log.d("Eliminar Pedido", "Pedido eliminado con éxito con ID: $pedidoId")
+                onComplete(true)
+            }
+            .addOnFailureListener { exception ->
+                Log.e("Error", "Error al eliminar el pedido con ID: $pedidoId, excepción: $exception")
+                onComplete(false)
+            }
+    }
+
 }

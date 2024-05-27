@@ -1,7 +1,6 @@
 package com.repuestosexpress.controllers
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -90,16 +89,13 @@ class SeleccionCantidadActivity : AppCompatActivity() {
                 .description(getString(R.string.confirmacion_realizar_pedido))
                 .type(type = BeautifulDialog.TYPE.INFO)
                 .position(BeautifulDialog.POSITIONS.CENTER)
-                .onPositive(text = getString(R.string.aceptar), shouldIDismissOnClick = true) {
+                .onPositive(text = getString(android.R.string.ok), shouldIDismissOnClick = true) {
                     val userUID = Utils.getPreferences(this)
-                    Utils.CONTROLAR_PEDIDOS.clear()
-                    Utils.CONTROLAR_PEDIDOS.add(LineasPedido(producto?.id!!, quantity))
-                    Log.d("CONTROLAR_PEDIDOS", userUID)
-                    Firebase().crearPedido(Utils.CONTROLAR_PEDIDOS, userUID)
+                    Firebase().crearPedidoLinea(LineasPedido(producto?.id!!, quantity), userUID)
                     Utils.Toast(this@SeleccionCantidadActivity, getString(R.string.pedido_realizado))
                     finish()
                 }
-                .onNegative(text = getString(R.string.cancelar)) {}
+                .onNegative(text = getString(android.R.string.cancel)) {}
         }
 
         btnAgregarCarrito.setOnClickListener {

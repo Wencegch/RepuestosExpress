@@ -2,7 +2,6 @@ package com.repuestosexpress.fragments
 
 import android.app.Activity
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,7 +19,6 @@ import com.iamageo.library.title
 import com.iamageo.library.type
 import com.repuestosexpress.R
 import com.repuestosexpress.adapter.RecyclerAdapterCesta
-import com.repuestosexpress.models.LineasPedido
 import com.repuestosexpress.utils.Firebase
 import com.repuestosexpress.utils.Utils
 
@@ -57,14 +55,13 @@ class CestaFragment : Fragment() {
                     .description(getString(R.string.confirmacion_realizar_pedido))
                     .type(type = BeautifulDialog.TYPE.INFO)
                     .position(BeautifulDialog.POSITIONS.CENTER)
-                    .onPositive(text = getString(R.string.aceptar), shouldIDismissOnClick = true) {
+                    .onPositive(text = getString(android.R.string.ok), shouldIDismissOnClick = true) {
                         val userUID = Utils.getPreferences(requireContext())
                         Firebase().crearPedido(Utils.CONTROLAR_PEDIDOS, userUID)
                         Utils.Toast(requireContext(), getString(R.string.pedido_realizado))
-                        Utils.CONTROLAR_PEDIDOS.clear()
                         mostrarPantalla()
                     }
-                    .onNegative(text = getString(R.string.cancelar)) {}
+                    .onNegative(text = getString(android.R.string.cancel)) {}
 
         }
     }
@@ -81,7 +78,7 @@ class CestaFragment : Fragment() {
         Utils.CONTROLAR_PEDIDOS.forEach { lineasPedido ->
             Firebase().obtenerProductoPorId(lineasPedido.idProducto) { product ->
                 if (product != null) {
-                    total += (product.precio ?: 0.0) * lineasPedido.cantidad
+                    total += (product.precio) * lineasPedido.cantidad
                 }
                 pendingCallbacks--
                 if (pendingCallbacks == 0) {

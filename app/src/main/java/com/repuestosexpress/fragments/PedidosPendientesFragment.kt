@@ -29,10 +29,10 @@ class PedidosPendientesFragment : Fragment() {
         pedidos = ArrayList()
         recyclerView = view.findViewById(R.id.recyclerViewPedidosPendientes)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        pedidosAdapter = RecyclerAdapterPedidos(pedidos)
+        pedidosAdapter = RecyclerAdapterPedidos(requireContext(), pedidos)
         recyclerView.adapter = pedidosAdapter
 
-        Firebase().obtenerPedidosUsuario(Utils.getPreferences(requireContext())){ listaPedidos ->
+        Firebase().obtenerPedidosPendientes(Utils.getPreferences(requireContext())){ listaPedidos ->
             pedidos.clear()
             pedidos.addAll(listaPedidos)
             pedidosAdapter.notifyDataSetChanged()

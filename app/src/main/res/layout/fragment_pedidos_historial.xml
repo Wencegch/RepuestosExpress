@@ -6,7 +6,7 @@
     tools:context=".fragments.PedidosHistorialFragment">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewPedidosHistorial"
+        android:id="@+id/recyclerViewPedidosFinalizados"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </FrameLayout>
