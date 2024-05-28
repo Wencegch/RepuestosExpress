@@ -166,7 +166,7 @@ class Firebase {
         }
     }
 
-    fun crearPedido(lineasPedidos: ArrayList<LineasPedido>, user: String) {
+    fun crearPedido(lineasPedidos: ArrayList<LineasPedido>, user: String, onComplete: () -> Unit) {
         val datosPedido: MutableMap<String, Any> = HashMap()
         val fechaActual = Calendar.getInstance().time
 
@@ -178,6 +178,8 @@ class Firebase {
             .add(datosPedido)
             .addOnSuccessListener { documentReference ->
                 val pedidoId = documentReference.id
+                val totalTasks = lineasPedidos.size // Solo crear línea por cada línea
+                var completedTasks = 0
 
                 // Crear una subcolección "lineas" dentro del pedido
                 for (linea in lineasPedidos) {
@@ -192,30 +194,26 @@ class Firebase {
                         .add(datosLinea)
                         .addOnSuccessListener { lineDocumentReference ->
                             Log.d("Linea", "Linea creada con ID: ${lineDocumentReference.id} en pedido con ID: $pedidoId")
+                            completedTasks++
+                            if (completedTasks == totalTasks) {
+                                Utils.CONTROLAR_PEDIDOS.clear()
+                                onComplete()
+                            }
                         }
                         .addOnFailureListener { exception ->
                             Log.e("Error", "Error al crear la línea en pedido con ID: $pedidoId, excepción: $exception")
+                            completedTasks++
+                            if (completedTasks == totalTasks) {
+                                Utils.CONTROLAR_PEDIDOS.clear()
+                                onComplete()
+                            }
                         }
                 }
             }
             .addOnFailureListener { exception ->
                 Log.e("Error", "Error al crear el pedido: $exception")
+                onComplete()
             }
-
-        // Recorremos todas las lineas
-        for (lineaPedido in lineasPedidos) {
-            // Actualizamos las veces que se pidió un producto
-            referenceProductos.document(lineaPedido.idProducto)
-                .update("veces_pedido", FieldValue.increment(lineaPedido.cantidad.toLong()))
-                .addOnSuccessListener {
-                    Log.d("Producto update", "Producto actualizado con éxito con el ID: ${lineaPedido.idProducto}")
-                    // Cuando se acabe no hará nada puesto que no es necesario que el usuario espere a esto
-                }
-                .addOnFailureListener { exception ->
-                    Log.e("Error", "Error al actualizar el producto ${lineaPedido.idProducto}: $exception")
-                }
-        }
-        Utils.CONTROLAR_PEDIDOS.clear()
     }
 
     //Para un pedido individual
@@ -247,16 +245,6 @@ class Firebase {
                     }
                     .addOnFailureListener { exception ->
                         Log.e("Error", "Error al crear la línea en pedido con ID: $pedidoId, excepción: $exception")
-                    }
-
-                // Actualizar las veces que se pidió un producto
-                referenceProductos.document(lineaPedido.idProducto)
-                    .update("veces_pedido", FieldValue.increment(lineaPedido.cantidad.toLong()))
-                    .addOnSuccessListener {
-                        Log.d("Producto update", "Producto actualizado con éxito con el ID: ${lineaPedido.idProducto}")
-                    }
-                    .addOnFailureListener { exception ->
-                        Log.e("Error", "Error al actualizar el producto ${lineaPedido.idProducto}: $exception")
                     }
             }
             .addOnFailureListener { exception ->
@@ -325,6 +313,27 @@ class Firebase {
             .addOnFailureListener { exception ->
                 Log.e("Error", "Error al eliminar el pedido con ID: $pedidoId, excepción: $exception")
                 onComplete(false)
+            }
+    }
+
+    fun obtenerLineasDePedido(pedidoId: String, onComplete: (List<LineasPedido>) -> Unit) {
+        val lineasPedido = mutableListOf<LineasPedido>()
+
+        referencePedidos.document(pedidoId)
+            .collection("lineas")
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                for (document in querySnapshot.documents) {
+                    val idProducto = document.getString("idProducto")
+                    val cantidad = document.getLong("cantidad")?.toInt()
+                    val lineaPedido = LineasPedido(idProducto!!, cantidad!!)
+                    lineasPedido.add(lineaPedido)
+                }
+                onComplete(lineasPedido)
+            }
+            .addOnFailureListener { exception ->
+                Log.e("Error", "Error al obtener las líneas del pedido: $exception")
+                onComplete(emptyList()) // Devolver una lista vacía en caso de error
             }
     }
 

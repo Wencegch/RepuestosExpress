@@ -1,5 +1,6 @@
 package com.repuestosexpress.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,19 +10,19 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.repuestosexpress.R
 import com.repuestosexpress.adapter.RecyclerAdapterPedidos
+import com.repuestosexpress.controllers.DetallePedidoActivity
 import com.repuestosexpress.models.Pedido
 import com.repuestosexpress.utils.Firebase
 import com.repuestosexpress.utils.Utils
 
-class PedidosHistorialFragment : Fragment() {
-
+class PedidosFinalizadosFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var pedidosAdapter: RecyclerAdapterPedidos
     private lateinit var pedidos: ArrayList<Pedido>
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_pedidos_historial, container, false)
+        return inflater.inflate(R.layout.fragment_pedidos_finalizados, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -38,5 +39,15 @@ class PedidosHistorialFragment : Fragment() {
             pedidos.addAll(listaPedidos)
             pedidosAdapter.notifyDataSetChanged()
         }
+
+        pedidosAdapter.setOnItemClickListener(object : RecyclerAdapterPedidos.OnItemClickListener {
+            override fun onItemClick(position: Int) {
+                val pedidoSeleccionado = pedidos[position]
+                val intent = Intent(requireContext(), DetallePedidoActivity::class.java).apply {
+                    putExtra("pedido", pedidoSeleccionado)
+                }
+                startActivity(intent)
+            }
+        })
     }
 }

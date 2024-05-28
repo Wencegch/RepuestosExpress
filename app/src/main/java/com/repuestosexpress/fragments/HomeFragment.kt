@@ -8,21 +8,21 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.repuestosexpress.R
-import com.repuestosexpress.adapter.RecyclerAdapterProductos
+import com.repuestosexpress.adapter.RecyclerAdapterHome
 import com.repuestosexpress.models.Producto
 import com.repuestosexpress.utils.Firebase
 
 class HomeFragment : Fragment() {
 
-    private lateinit var sugerenciasAdapter: RecyclerAdapterProductos
+    private lateinit var sugerenciasAdapter: RecyclerAdapterHome
     private lateinit var recyclerViewSugerencias: RecyclerView
     private lateinit var sugerencias: ArrayList<Producto>
 
-    private lateinit var novedadesAdapter: RecyclerAdapterProductos
+    private lateinit var novedadesAdapter: RecyclerAdapterHome
     private lateinit var recyclerViewNovedades: RecyclerView
     private lateinit var novedades: ArrayList<Producto>
 
-    private lateinit var productosTopVentasAdapter: RecyclerAdapterProductos
+    private lateinit var productosTopVentasAdapter: RecyclerAdapterHome
     private lateinit var productosTopVentas: ArrayList<Producto>
     private lateinit var recyclerViewProductosTopVentas: RecyclerView
 
@@ -38,7 +38,7 @@ class HomeFragment : Fragment() {
         sugerencias = ArrayList()
         recyclerViewSugerencias = view.findViewById(R.id.recyclerViewSugerencias)
         recyclerViewSugerencias.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        sugerenciasAdapter = RecyclerAdapterProductos(sugerencias)
+        sugerenciasAdapter = RecyclerAdapterHome(sugerencias)
         recyclerViewSugerencias.adapter = sugerenciasAdapter
 
         Firebase().obtenerProductosSugeridos{ listaProductosSugeridos->
@@ -50,7 +50,7 @@ class HomeFragment : Fragment() {
         novedades = ArrayList()
         recyclerViewNovedades = view.findViewById(R.id.recyclerViewNovedades)
         recyclerViewNovedades.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        novedadesAdapter = RecyclerAdapterProductos(novedades)
+        novedadesAdapter = RecyclerAdapterHome(novedades)
         recyclerViewNovedades.adapter = novedadesAdapter
 
         Firebase().obtenerProductosNovedades{ listaProductosNovedades->
@@ -62,7 +62,7 @@ class HomeFragment : Fragment() {
         productosTopVentas = ArrayList()
         recyclerViewProductosTopVentas = view.findViewById(R.id.recyclerViewTopVentas)
         recyclerViewProductosTopVentas.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        productosTopVentasAdapter = RecyclerAdapterProductos(productosTopVentas)
+        productosTopVentasAdapter = RecyclerAdapterHome(productosTopVentas)
         recyclerViewProductosTopVentas.adapter = productosTopVentasAdapter
 
         Firebase().obtenerProductosTopVentas{ listaProductosTopVentas->

@@ -1,5 +1,6 @@
 package com.repuestosexpress.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.repuestosexpress.R
 import com.repuestosexpress.adapter.RecyclerAdapterPedidos
+import com.repuestosexpress.controllers.DetallePedidoActivity
 import com.repuestosexpress.models.Pedido
 import com.repuestosexpress.utils.Firebase
 import com.repuestosexpress.utils.Utils
@@ -37,5 +39,15 @@ class PedidosPendientesFragment : Fragment() {
             pedidos.addAll(listaPedidos)
             pedidosAdapter.notifyDataSetChanged()
         }
+
+        pedidosAdapter.setOnItemClickListener(object : RecyclerAdapterPedidos.OnItemClickListener {
+            override fun onItemClick(position: Int) {
+                val pedidoSeleccionado = pedidos[position]
+                val intent = Intent(requireContext(), DetallePedidoActivity::class.java).apply {
+                    putExtra("pedido", pedidoSeleccionado)
+                }
+                startActivity(intent)
+            }
+        })
     }
 }

@@ -42,6 +42,7 @@ class CestaFragment : Fragment() {
         txtsubtotal = view.findViewById(R.id.txtSubtotalCesta)
         txtCestaVacia = view.findViewById(R.id.txtCestaVacia)
         btnTramitarPedido = view.findViewById(R.id.btn_TramitarPedido)
+
         recyclerView = view.findViewById(R.id.recyclerViewCesta)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         cestaAdapter = RecyclerAdapterCesta(Utils.CONTROLAR_PEDIDOS, this)
@@ -50,19 +51,19 @@ class CestaFragment : Fragment() {
         mostrarPantalla()
 
         btnTramitarPedido.setOnClickListener {
-                BeautifulDialog.build(requireContext() as Activity)
-                    .title(getString(R.string.realizar_pedido), titleColor = R.color.black)
-                    .description(getString(R.string.confirmacion_realizar_pedido))
-                    .type(type = BeautifulDialog.TYPE.INFO)
-                    .position(BeautifulDialog.POSITIONS.CENTER)
-                    .onPositive(text = getString(android.R.string.ok), shouldIDismissOnClick = true) {
-                        val userUID = Utils.getPreferences(requireContext())
-                        Firebase().crearPedido(Utils.CONTROLAR_PEDIDOS, userUID)
+            BeautifulDialog.build(requireContext() as Activity)
+                .title(getString(R.string.realizar_pedido), titleColor = R.color.black)
+                .description(getString(R.string.confirmacion_realizar_pedido))
+                .type(type = BeautifulDialog.TYPE.INFO)
+                .position(BeautifulDialog.POSITIONS.CENTER)
+                .onPositive(text = getString(android.R.string.ok), shouldIDismissOnClick = true) {
+                    val userUID = Utils.getPreferences(requireContext())
+                    Firebase().crearPedido(Utils.CONTROLAR_PEDIDOS, userUID) {
                         Utils.Toast(requireContext(), getString(R.string.pedido_realizado))
                         mostrarPantalla()
                     }
-                    .onNegative(text = getString(android.R.string.cancel)) {}
-
+                }
+                .onNegative(text = getString(android.R.string.cancel)) {}
         }
     }
 

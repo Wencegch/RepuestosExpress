@@ -1,8 +1,9 @@
 package com.repuestosexpress.models
 
+import java.io.Serializable
 import java.util.Date
 
-class Pedido {
+class Pedido: Serializable {
     private var _id: String = ""
     private var _usuario: String = ""
     private var _estado: String = ""

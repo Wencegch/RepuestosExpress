@@ -28,24 +28,25 @@ class RecyclerAdapterCesta(private var listLineasPedido: ArrayList<LineasPedido>
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val lineasPedido: LineasPedido = listLineasPedido[position]
 
+        progressDrawable = CircularProgressDrawable(holder.itemView.context)
+        progressDrawable.strokeWidth = 10f
+        progressDrawable.setStyle(CircularProgressDrawable.LARGE)
+        progressDrawable.centerRadius = 30f
+        progressDrawable.start()
+
         Firebase().obtenerProductoPorId(lineasPedido.idProducto) { lineasPedi ->
             holder.nombreLinea.text = lineasPedi?.nombre
             val precioUnitario = lineasPedi?.precio ?: 0.0
             val precioTotal = precioUnitario * lineasPedido.cantidad
             holder.precioLinea.text = holder.itemView.context.getString(R.string.precio_formato2, precioTotal)
-            holder.cantidadLinea.text = holder.itemView.context.getString(R.string.cantidad) + lineasPedido.cantidad
+            holder.cantidadLinea.text = holder.itemView.context.getString(R.string.cantidad_formato, lineasPedido.cantidad)
+
             Glide.with(holder.itemView.context)
                 .load(lineasPedi?.imgUrl)
                 .placeholder(progressDrawable)
                 .error(R.drawable.imagennoencontrada)
                 .into(holder.imagenLinea)
         }
-
-        progressDrawable = CircularProgressDrawable(holder.itemView.context)
-        progressDrawable.strokeWidth = 10f
-        progressDrawable.setStyle(CircularProgressDrawable.LARGE)
-        progressDrawable.centerRadius = 30f
-        progressDrawable.start()
 
         holder.itemView.setOnClickListener {
             onItemClickListener?.onItemClick(position)

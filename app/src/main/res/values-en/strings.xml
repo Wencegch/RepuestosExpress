@@ -49,4 +49,6 @@
     <string name="cancelar_pedido">Cancel order</string>
     <string name="informacion_eliminar_pedido">Are you sure you want to cancel this order?</string>
     <string name="error_eliminar_pedido">Error deleting the order</string>
+    <string name="cantidad_formato">Quantity:  %1$d</string>
+    <string name="detalles_pedido">Order details</string>
 </resources>

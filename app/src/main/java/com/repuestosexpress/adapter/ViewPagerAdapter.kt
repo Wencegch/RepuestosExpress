@@ -4,7 +4,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.repuestosexpress.fragments.PedidosHistorialFragment
+import com.repuestosexpress.fragments.PedidosFinalizadosFragment
 import com.repuestosexpress.fragments.PedidosPendientesFragment
 
 /**
@@ -15,7 +15,7 @@ import com.repuestosexpress.fragments.PedidosPendientesFragment
 class ViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) : FragmentStateAdapter(fragmentManager, lifecycle) {
 
     // Lista de fragmentos gestionados por el adaptador
-    private val fragmentList = listOf(PedidosPendientesFragment(), PedidosHistorialFragment())
+    private val fragmentList = listOf(PedidosPendientesFragment(), PedidosFinalizadosFragment())
 
     /**
      * Obtiene el número total de fragmentos en el ViewPager2.

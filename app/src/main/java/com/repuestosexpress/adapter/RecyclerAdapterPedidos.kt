@@ -25,7 +25,6 @@ import java.util.Locale
 class RecyclerAdapterPedidos(private val context: Context, private var listPedidos: ArrayList<Pedido>
 ) : RecyclerView.Adapter<RecyclerAdapterPedidos.ViewHolder>() {
 
-
     private var onItemClickListener: OnItemClickListener? = null
     private var onItemLongClickListener: RecyclerAdapterProductos.OnItemLongClickListener? = null
 
@@ -88,7 +87,6 @@ class RecyclerAdapterPedidos(private val context: Context, private var listPedid
             true
         }
     }
-
 
     override fun getItemCount(): Int {
         return listPedidos.size
