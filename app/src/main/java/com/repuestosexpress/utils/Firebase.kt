@@ -1,7 +1,6 @@
 package com.repuestosexpress.utils
 
 import android.util.Log
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.repuestosexpress.models.Familia
@@ -303,15 +302,35 @@ class Firebase {
     }
 
     fun borrarPedidoPorId(pedidoId: String, onComplete: (Boolean) -> Unit) {
-        // Obtener la referencia al documento del pedido por su ID
-        referencePedidos.document(pedidoId)
-            .delete()
-            .addOnSuccessListener {
-                Log.d("Eliminar Pedido", "Pedido eliminado con éxito con ID: $pedidoId")
-                onComplete(true)
+        // Primero obtener y eliminar todas las líneas de pedido en la subcolección "lineas"
+        referencePedidos.document(pedidoId).collection("lineas")
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                val batch = FirebaseFirestore.getInstance().batch()
+                for (document in querySnapshot.documents) {
+                    batch.delete(document.reference)
+                }
+
+                // Una vez que las líneas de pedido están eliminadas, eliminar el documento del pedido
+                batch.commit()
+                    .addOnSuccessListener {
+                        referencePedidos.document(pedidoId).delete()
+                            .addOnSuccessListener {
+                                Log.d("Eliminar Pedido", "Pedido y subcolecciones eliminados con éxito con ID: $pedidoId")
+                                onComplete(true)
+                            }
+                            .addOnFailureListener { exception ->
+                                Log.e("Error", "Error al eliminar el pedido con ID: $pedidoId, excepción: $exception")
+                                onComplete(false)
+                            }
+                    }
+                    .addOnFailureListener { exception ->
+                        Log.e("Error", "Error al eliminar subcolecciones del pedido con ID: $pedidoId, excepción: $exception")
+                        onComplete(false)
+                    }
             }
             .addOnFailureListener { exception ->
-                Log.e("Error", "Error al eliminar el pedido con ID: $pedidoId, excepción: $exception")
+                Log.e("Error", "Error al obtener subcolecciones del pedido con ID: $pedidoId, excepción: $exception")
                 onComplete(false)
             }
     }

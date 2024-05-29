@@ -26,17 +26,18 @@ class RecyclerAdapterDetallePedidos(private var lineasPedidos: ArrayList<LineasP
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val lineasPedido: LineasPedido = lineasPedidos[position]
 
-        // Configuración del CircularProgressDrawable
-        progressDrawable = CircularProgressDrawable(holder.itemView.context)
-        progressDrawable.setStrokeWidth(10f)
-        progressDrawable.setStyle(CircularProgressDrawable.LARGE)
-        progressDrawable.setCenterRadius(30f)
-        progressDrawable.start()
-
         Firebase().obtenerProductoPorId(lineasPedido.idProducto) { producto ->
             if (producto != null) {
                 holder.nombreDetallePedido.text = producto.nombre
-                holder.precioDetallePedido.text = holder.itemView.context.getString(R.string.precio_formato2, producto.precio)
+                val precio = producto.precio * lineasPedido.cantidad
+                holder.precioDetallePedido.text = holder.itemView.context.getString(R.string.precio_formato2, precio)
+
+                // Configuración del CircularProgressDrawable
+                progressDrawable = CircularProgressDrawable(holder.itemView.context)
+                progressDrawable.setStrokeWidth(10f)
+                progressDrawable.setStyle(CircularProgressDrawable.LARGE)
+                progressDrawable.setCenterRadius(30f)
+                progressDrawable.start()
 
                 Glide.with(holder.itemView.context)
                     .load(producto.imgUrl)

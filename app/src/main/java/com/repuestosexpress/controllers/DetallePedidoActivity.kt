@@ -3,11 +3,8 @@ package com.repuestosexpress.controllers
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.iamageo.library.BeautifulDialog
@@ -69,10 +66,10 @@ class DetallePedidoActivity : AppCompatActivity() {
 
         Firebase().obtenerLineasDePedido(pedido!!.id) { listaPedidos ->
             pedidos.addAll(listaPedidos)
-            textoPedidoId.text = "ID: ${pedido!!.id}"
+            textoPedidoId.text = getString(R.string.id, pedido!!.id)
             val fechapar = SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(pedido!!.fecha)
-            textoFecha.text = "Fecha: $fechapar"
-            textoEstado.text = "Estado: " + pedido!!.estado
+            textoFecha.text = getString(R.string.fecha, fechapar)
+            textoEstado.text = getString(R.string.estado, pedido!!.estado)
 
             // Obtener productos para las líneas de pedido
             obtenerProductosParaLineas()
@@ -87,6 +84,8 @@ class DetallePedidoActivity : AppCompatActivity() {
                 .onPositive(text = getString(android.R.string.ok), shouldIDismissOnClick = true) {
                     Firebase().borrarPedidoPorId(pedido!!.id) { success ->
                         if (success) {
+                            Utils.Toast(this, getString(R.string.pedido_cancelado))
+                            setResult(RESULT_OK)
                             finish()
                         } else {
                             Utils.Toast(this, getString(R.string.error_eliminar_pedido))
@@ -104,17 +103,20 @@ class DetallePedidoActivity : AppCompatActivity() {
             return
         }
 
+        var total = 0.0
+
         for (lineaPedido in pedidos) {
             Firebase().obtenerProductoPorId(lineaPedido.idProducto) { producto ->
                 producto?.let {
                     productos.add(it)
+                    total += it.precio * lineaPedido.cantidad
                 }
                 pendingCallbacks--
                 if (pendingCallbacks == 0) {
                     detalleAdapter.notifyDataSetChanged()
+                    textoTotal.text = getString(R.string.total, total)
                 }
             }
         }
     }
 }
-

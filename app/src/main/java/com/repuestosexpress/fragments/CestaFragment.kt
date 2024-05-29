@@ -27,7 +27,6 @@ class CestaFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var cestaAdapter: RecyclerAdapterCesta
     private lateinit var txtsubtotal: TextView
-    private lateinit var txtTotal: TextView
     private lateinit var txtCestaVacia: TextView
     private lateinit var btnTramitarPedido: Button
 
@@ -38,7 +37,6 @@ class CestaFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        txtTotal = view.findViewById(R.id.txtPrecioTotal)
         txtsubtotal = view.findViewById(R.id.txtSubtotalCesta)
         txtCestaVacia = view.findViewById(R.id.txtCestaVacia)
         btnTramitarPedido = view.findViewById(R.id.btn_TramitarPedido)
@@ -92,16 +90,14 @@ class CestaFragment : Fragment() {
     fun mostrarPantalla() {
         if (Utils.CONTROLAR_PEDIDOS.isEmpty()) {
             txtsubtotal.visibility = View.GONE
-            txtTotal.visibility = View.GONE
             btnTramitarPedido.visibility = View.GONE
             txtCestaVacia.visibility = View.VISIBLE
         } else {
             calcularTotal { total ->
-                txtTotal.text = getString(R.string.precio_formato, total)
+                txtsubtotal.text = getString(R.string.subtotal, total)
             }
             txtCestaVacia.visibility = View.GONE
             txtsubtotal.visibility = View.VISIBLE
-            txtTotal.visibility = View.VISIBLE
             btnTramitarPedido.visibility = View.VISIBLE
         }
     }

@@ -43,7 +43,7 @@
     <string name="tramitar_pedido">Process order</string>
     <string name="cesta_vacia">No products added to your basket</string>
     <string name="pedido_realizado">ORDER PLACED</string>
-    <string name="estado">Status</string>
+    <string name="estado">Status: %1$s</string>
     <string name="pedido">Order</string>
     <string name="borrar">Delete</string>
     <string name="cancelar_pedido">Cancel order</string>
@@ -51,4 +51,6 @@
     <string name="error_eliminar_pedido">Error deleting the order</string>
     <string name="cantidad_formato">Quantity:  %1$d</string>
     <string name="detalles_pedido">Order details</string>
+    <string name="pedido_cancelado">ORDER CANCELLED</string>
+    <string name="fecha">Date: %1$s</string>
 </resources>
