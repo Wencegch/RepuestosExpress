@@ -59,4 +59,8 @@
     <string name="pedido_cancelado">PEDIDO CANCELADO</string>
     <string name="fecha">Fecha: %1$s</string>
     <string name="id" translatable="false">ID: %1$s</string>
+    <string name="usuario_creado">Usuario creado</string>
+    <string name="filtro_por_id">Buscar por Id</string>
+    <string name="filtro_familia">Buscar familia</string>
+    <string name="filtro_producto">Buscar producto</string>
 </resources>

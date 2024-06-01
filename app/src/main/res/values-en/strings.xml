@@ -53,4 +53,8 @@
     <string name="detalles_pedido">Order details</string>
     <string name="pedido_cancelado">ORDER CANCELLED</string>
     <string name="fecha">Date: %1$s</string>
+    <string name="usuario_creado">User created</string>
+    <string name="filtro_por_id">Search by Id</string>
+    <string name="filtro_familia">"Search family "</string>
+    <string name="filtro_producto">Search product</string>
 </resources>

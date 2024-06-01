@@ -1,28 +1,16 @@
-package com.repuestosexpress.adapter
+package com.repuestosexpress.adapters
 
-import android.app.Activity
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.iamageo.library.BeautifulDialog
-import com.iamageo.library.description
-import com.iamageo.library.onNegative
-import com.iamageo.library.onPositive
-import com.iamageo.library.position
-import com.iamageo.library.title
-import com.iamageo.library.type
 import com.repuestosexpress.R
 import com.repuestosexpress.models.Pedido
-import com.repuestosexpress.utils.Firebase
-import com.repuestosexpress.utils.Utils
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class RecyclerAdapterPedidos(private val context: Context, private var listPedidos: ArrayList<Pedido>
+class RecyclerAdapterPedidos(private var listPedidos: ArrayList<Pedido>
 ) : RecyclerView.Adapter<RecyclerAdapterPedidos.ViewHolder>() {
 
     private var onItemClickListener: OnItemClickListener? = null
@@ -53,39 +41,10 @@ class RecyclerAdapterPedidos(private val context: Context, private var listPedid
         }
 
         holder.itemView.setOnLongClickListener {
-            val popup = PopupMenu(holder.itemView.context, holder.itemView)
-            popup.inflate(R.menu.popup_menu)
-
-            popup.setOnMenuItemClickListener { item ->
-                when (item.itemId) {
-                    R.id.btn_Delete -> {
-                        BeautifulDialog.build(context as Activity)
-                            .title(context.getString(R.string.cancelar_pedido), titleColor = R.color.black)
-                            .description(context.getString(R.string.informacion_eliminar_pedido), color = R.color.black)
-                            .type(type = BeautifulDialog.TYPE.ALERT)
-                            .position(BeautifulDialog.POSITIONS.CENTER)
-                            .onPositive(text = context.getString(android.R.string.ok), shouldIDismissOnClick = true) {
-                                val pedido = listPedidos[position]
-                                Firebase().borrarPedidoPorId(pedido.id){ success ->
-                                    if (success){
-                                        listPedidos.removeAt(position)
-                                        notifyItemRemoved(position)
-                                        notifyItemRangeChanged(position, listPedidos.size)
-                                    }else{
-                                        Utils.Toast(context, context.getString(R.string.error_eliminar_pedido))
-                                    }
-
-                                }
-                            }
-                            .onNegative(text = context.getString(android.R.string.cancel)) {}
-                        true
-                    }
-                    else -> false
-                }
-            }
-            popup.show()
+            onItemLongClickListener?.onItemLongClick(position)
             true
         }
+
     }
 
     override fun getItemCount(): Int {
@@ -143,4 +102,8 @@ class RecyclerAdapterPedidos(private val context: Context, private var listPedid
         onItemLongClickListener = listener
     }
 
+    fun updatePedidos(newPedidos: ArrayList<Pedido>) {
+        this.listPedidos = newPedidos
+        notifyDataSetChanged()
+    }
 }

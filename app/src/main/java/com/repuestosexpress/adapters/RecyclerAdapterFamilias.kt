@@ -1,4 +1,4 @@
-package com.repuestosexpress.adapter
+package com.repuestosexpress.adapters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -107,4 +107,8 @@ class RecyclerAdapterFamilias(private var listFamilias: ArrayList<Familia>): Rec
         onItemLongClickListener = listener
     }
 
+    fun updateFamilias(newFamilias: ArrayList<Familia>) {
+        this.listFamilias = newFamilias
+        notifyDataSetChanged()
+    }
 }

@@ -67,7 +67,7 @@ class SignUpActivity : AppCompatActivity() {
                                             // El perfil del usuario se actualizó correctamente
                                             Utils.Toast(
                                                 this,
-                                                getString(R.string.user) + " " + user.displayName + getString(
+                                                getString(R.string.user) + " " + user.displayName + " " + getString(
                                                     R.string.created
                                                 )
                                             )

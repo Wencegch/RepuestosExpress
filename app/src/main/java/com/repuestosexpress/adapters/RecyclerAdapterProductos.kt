@@ -1,4 +1,4 @@
-package com.repuestosexpress.adapter
+package com.repuestosexpress.adapters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -11,22 +11,22 @@ import com.bumptech.glide.Glide
 import com.repuestosexpress.models.Producto
 import com.repuestosexpress.R
 
-class RecyclerAdapterHome(private var listProductos: ArrayList<Producto>) :RecyclerView.Adapter<RecyclerAdapterHome.ViewHolder>() {
+class RecyclerAdapterProductos(private var listProductos: ArrayList<Producto>) :RecyclerView.Adapter<RecyclerAdapterProductos.ViewHolder>() {
 
     private lateinit var progressDrawable: CircularProgressDrawable
     private var onItemClickListener: OnItemClickListener? = null
     private var onItemLongClickListener: OnItemLongClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_home, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_producto, parent, false)
         return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val producto: Producto = listProductos[position]
 
-        holder.nombreProductoHome.text = producto.nombre
-        holder.precioProductoHome.text = holder.itemView.context.getString(R.string.precio_formato, producto.precio)
+        holder.nombreProducto.text = producto.nombre
+        holder.precioProducto.text = holder.itemView.context.getString(R.string.precio_formato, producto.precio)
 
         // Configuración del CircularProgressDrawable
         progressDrawable = CircularProgressDrawable(holder.itemView.context)
@@ -39,7 +39,7 @@ class RecyclerAdapterHome(private var listProductos: ArrayList<Producto>) :Recyc
             .load(producto.imgUrl)
             .placeholder(progressDrawable)
             .error(R.drawable.imagennoencontrada)
-            .into(holder.imagenProductoHome)
+            .into(holder.imagenProducto)
 
         holder.itemView.setOnClickListener {
             onItemClickListener?.onItemClick(position)
@@ -57,9 +57,9 @@ class RecyclerAdapterHome(private var listProductos: ArrayList<Producto>) :Recyc
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val nombreProductoHome: TextView = itemView.findViewById(R.id.txtNombreProductoHome)
-        val precioProductoHome: TextView = itemView.findViewById(R.id.txtPrecioProductoHome)
-        val imagenProductoHome: ImageView = itemView.findViewById(R.id.imageViewProductoHome)
+        val nombreProducto: TextView = itemView.findViewById(R.id.txtNombreProducto)
+        val precioProducto: TextView = itemView.findViewById(R.id.txtPrecioProducto)
+        val imagenProducto: ImageView = itemView.findViewById(R.id.imageViewProducto)
     }
 
     fun getProducto(pos: Int): Producto {
@@ -82,5 +82,10 @@ class RecyclerAdapterHome(private var listProductos: ArrayList<Producto>) :Recyc
 
     fun setOnItemLongClickListener(listener: OnItemLongClickListener) {
         onItemLongClickListener = listener
+    }
+
+    fun updateProductos(newProductos: ArrayList<Producto>) {
+        this.listProductos = newProductos
+        notifyDataSetChanged()
     }
 }

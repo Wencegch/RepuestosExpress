@@ -15,7 +15,7 @@ import com.iamageo.library.position
 import com.iamageo.library.title
 import com.iamageo.library.type
 import com.repuestosexpress.R
-import com.repuestosexpress.adapter.RecyclerAdapterDetallePedidos
+import com.repuestosexpress.adapters.RecyclerAdapterDetallePedidos
 import com.repuestosexpress.models.LineasPedido
 import com.repuestosexpress.models.Pedido
 import com.repuestosexpress.models.Producto

@@ -18,7 +18,7 @@ import com.iamageo.library.position
 import com.iamageo.library.title
 import com.iamageo.library.type
 import com.repuestosexpress.R
-import com.repuestosexpress.adapter.RecyclerAdapterCesta
+import com.repuestosexpress.adapters.RecyclerAdapterCesta
 import com.repuestosexpress.utils.Firebase
 import com.repuestosexpress.utils.Utils
 

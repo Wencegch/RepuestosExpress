@@ -9,7 +9,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import com.repuestosexpress.R
-import com.repuestosexpress.adapter.ViewPagerAdapter
+import com.repuestosexpress.adapters.ViewPagerAdapter
 
 /**
  * Fragmento que muestra una lista de pedidos organizada en pestañas.

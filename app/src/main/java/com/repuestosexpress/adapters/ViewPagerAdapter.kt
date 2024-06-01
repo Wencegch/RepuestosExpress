@@ -1,4 +1,4 @@
-package com.repuestosexpress.adapter
+package com.repuestosexpress.adapters
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
