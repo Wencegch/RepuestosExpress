@@ -35,7 +35,9 @@ class Firebase {
 
     fun obtenerProductosFamilia(idFamilia: String, onComplete: (List<Producto>) -> Unit) {
         val listaProductos = mutableListOf<Producto>()
-        referenceProductos.whereEqualTo("idFamilia", idFamilia).get()
+        referenceProductos.whereEqualTo("idFamilia", idFamilia)
+            .whereEqualTo("eliminado", false)
+            .get()
             .addOnSuccessListener { querySnapshot ->
                 for (document in querySnapshot.documents) {
                     val idFirebase = document.id
@@ -87,7 +89,8 @@ class Firebase {
     fun obtenerProductosNovedades(onComplete: (List<Producto>) -> Unit) {
         val listaNovedades = mutableListOf<Producto>()
 
-        referenceProductos.orderBy("fecha", Query.Direction.DESCENDING) // Ordenar por fecha en orden descendente
+        referenceProductos
+            .orderBy("fecha", Query.Direction.DESCENDING) // Ordenar por fecha en orden descendente
             .limit(4) // Limitar la cantidad de resultados a 4
             .get()
             .addOnSuccessListener { querySnapshot ->
@@ -115,11 +118,15 @@ class Firebase {
     fun obtenerProductosTopVentas(onComplete: (List<Producto>) -> Unit) {
         val listaProductos = mutableListOf<Producto>()
 
-        referenceProductos.orderBy("veces_pedido",Query.Direction.DESCENDING) // Ordenar por veces_pedido de mayor a menor
-            .limit(2) // Limitar la cantidad de resultados a 2
+        referenceProductos
+            .whereEqualTo("eliminado", false)
+            .orderBy("veces_pedido", Query.Direction.DESCENDING)
+            .limit(2)
             .get()
             .addOnSuccessListener { querySnapshot ->
+                Log.d("Consulta", "Total documentos: ${querySnapshot.documents.size}")
                 for (document in querySnapshot.documents) {
+                    Log.d("Documento", "ID: ${document.id}, Datos: ${document.data}")
                     val idProducto = document.id
                     val nombre = document.getString("nombre")
                     val precio = document.getDouble("precio")
@@ -136,9 +143,10 @@ class Firebase {
             }
             .addOnFailureListener { exception ->
                 Log.e("Error", "Error al obtener productos por veces_pedido: $exception")
-                onComplete(emptyList()) // Devolver una lista vacía en caso de error
+                onComplete(emptyList())
             }
     }
+
 
     fun obtenerProductoPorId(idProducto: String, onComplete: (Producto?) -> Unit) {
         referenceProductos.document(idProducto).get().addOnSuccessListener { document ->
@@ -165,13 +173,14 @@ class Firebase {
         }
     }
 
-    fun crearPedido(lineasPedidos: ArrayList<LineasPedido>, user: String, onComplete: () -> Unit) {
+    fun crearPedido(lineasPedidos: ArrayList<LineasPedido>, user: String, direccion: String, onComplete: () -> Unit) {
         val datosPedido: MutableMap<String, Any> = HashMap()
         val fechaActual = Calendar.getInstance().time
 
         datosPedido["usuario"] = user
         datosPedido["fecha"] = fechaActual
         datosPedido["estado"] = "Pendiente"
+        datosPedido["direccion"] = direccion
 
         referencePedidos
             .add(datosPedido)
@@ -186,27 +195,37 @@ class Firebase {
                     datosLinea["idProducto"] = linea.idProducto
                     datosLinea["cantidad"] = linea.cantidad
 
-                    // Añadir cada línea de pedido como documento en la subcolección "lineas" del pedido creado
-                    referencePedidos
-                        .document(pedidoId)
-                        .collection("lineas")
-                        .add(datosLinea)
-                        .addOnSuccessListener { lineDocumentReference ->
-                            Log.d("Linea", "Linea creada con ID: ${lineDocumentReference.id} en pedido con ID: $pedidoId")
-                            completedTasks++
-                            if (completedTasks == totalTasks) {
-                                Utils.CONTROLAR_PEDIDOS.clear()
-                                onComplete()
+                    obtenerProductoPorId(linea.idProducto) { producto ->
+                        datosLinea["precio"] = producto!!.precio
+
+                        // Añadir cada línea de pedido como documento en la subcolección "lineas" del pedido creado
+                        referencePedidos
+                            .document(pedidoId)
+                            .collection("lineas")
+                            .add(datosLinea)
+                            .addOnSuccessListener { lineDocumentReference ->
+                                Log.d(
+                                    "Linea",
+                                    "Linea creada con ID: ${lineDocumentReference.id} en pedido con ID: $pedidoId"
+                                )
+                                completedTasks++
+                                if (completedTasks == totalTasks) {
+                                    Utils.CONTROLAR_PEDIDOS.clear()
+                                    onComplete()
+                                }
                             }
-                        }
-                        .addOnFailureListener { exception ->
-                            Log.e("Error", "Error al crear la línea en pedido con ID: $pedidoId, excepción: $exception")
-                            completedTasks++
-                            if (completedTasks == totalTasks) {
-                                Utils.CONTROLAR_PEDIDOS.clear()
-                                onComplete()
+                            .addOnFailureListener { exception ->
+                                Log.e(
+                                    "Error",
+                                    "Error al crear la línea en pedido con ID: $pedidoId, excepción: $exception"
+                                )
+                                completedTasks++
+                                if (completedTasks == totalTasks) {
+                                    Utils.CONTROLAR_PEDIDOS.clear()
+                                    onComplete()
+                                }
                             }
-                        }
+                    }
                 }
             }
             .addOnFailureListener { exception ->
@@ -216,13 +235,14 @@ class Firebase {
     }
 
     //Para un pedido individual
-    fun crearPedidoLinea(lineaPedido: LineasPedido, user: String) {
+    fun crearPedidoLinea(lineaPedido: LineasPedido, user: String, direccion: String) {
         val datosPedido: MutableMap<String, Any> = HashMap()
         val fechaActual = Calendar.getInstance().time
 
         datosPedido["usuario"] = user
         datosPedido["fecha"] = fechaActual
         datosPedido["estado"] = "Pendiente"
+        datosPedido["direccion"] = direccion
 
         referencePedidos
             .add(datosPedido)
@@ -234,17 +254,26 @@ class Firebase {
                 datosLinea["idProducto"] = lineaPedido.idProducto
                 datosLinea["cantidad"] = lineaPedido.cantidad
 
-                // Añadir la línea de pedido como documento en la subcolección "lineas" del pedido creado
-                referencePedidos
-                    .document(pedidoId)
-                    .collection("lineas")
-                    .add(datosLinea)
-                    .addOnSuccessListener { lineDocumentReference ->
-                        Log.d("Linea", "Linea creada con ID: ${lineDocumentReference.id} en pedido con ID: $pedidoId")
+
+                obtenerProductoPorId(lineaPedido.idProducto) { producto ->
+                    if (producto != null) {
+                        datosLinea["precio"] = producto.precio
+
+                        // Añadir la línea de pedido como documento en la subcolección "lineas" del pedido creado
+                        referencePedidos
+                            .document(pedidoId)
+                            .collection("lineas")
+                            .add(datosLinea)
+                            .addOnSuccessListener { lineDocumentReference ->
+                                Log.d("Linea", "Linea creada con ID: ${lineDocumentReference.id} en pedido con ID: $pedidoId")
+                            }
+                            .addOnFailureListener { exception ->
+                                Log.e("Error", "Error al crear la línea en pedido con ID: $pedidoId, excepción: $exception")
+                            }
+                    } else {
+                        Log.e("Error", "El producto no se encontró.")
                     }
-                    .addOnFailureListener { exception ->
-                        Log.e("Error", "Error al crear la línea en pedido con ID: $pedidoId, excepción: $exception")
-                    }
+                }
             }
             .addOnFailureListener { exception ->
                 Log.e("Error", "Error al crear el pedido: $exception")
@@ -262,9 +291,10 @@ class Firebase {
                     val idPedido = document.id
                     val estado = document.getString("estado")
                     val fecha = document.getDate("fecha")
+                    val direccion = document.getString("direccion")
 
-                    if (estado != null && fecha != null) {
-                        val pedido = Pedido(idPedido, user, estado, fecha)
+                    if (estado != null && fecha != null && direccion != null) {
+                        val pedido = Pedido(idPedido, user, estado, fecha, direccion)
                         listaPedidos.add(pedido)
                     }
                 }
@@ -287,9 +317,10 @@ class Firebase {
                     val idPedido = document.id
                     val estado = document.getString("estado")
                     val fecha = document.getDate("fecha")
+                    val direccion = document.getString("direccion")
 
-                    if (estado != null && fecha != null) {
-                        val pedido = Pedido(idPedido, user, estado, fecha)
+                    if (estado != null && fecha != null && direccion != null) {
+                        val pedido = Pedido(idPedido, user, estado, fecha, direccion)
                         listaPedidos.add(pedido)
                     }
                 }
@@ -345,7 +376,8 @@ class Firebase {
                 for (document in querySnapshot.documents) {
                     val idProducto = document.getString("idProducto")
                     val cantidad = document.getLong("cantidad")?.toInt()
-                    val lineaPedido = LineasPedido(idProducto!!, cantidad!!)
+                    val precio = document.getDouble("precio")
+                    val lineaPedido = LineasPedido(idProducto!!, cantidad!!, precio!!)
                     lineasPedido.add(lineaPedido)
                 }
                 onComplete(lineasPedido)

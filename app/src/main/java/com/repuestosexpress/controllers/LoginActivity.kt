@@ -7,10 +7,8 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
-import androidx.activity.enableEdgeToEdge
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -27,7 +25,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var btnLogingWithEmail: Button
     private lateinit var txtEmailLogin: EditText
     private lateinit var txtPass: EditText
-
+    private lateinit var txtRecuperarPass: TextView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -35,8 +33,9 @@ class LoginActivity : AppCompatActivity() {
         btnLogingWithEmail = findViewById(R.id.btn_Login)
         btnLogingGoogle = findViewById(R.id.btn_singGoogle)
         btnRegisterWithEmail = findViewById(R.id.btn_Registrar)
-        txtEmailLogin = findViewById(R.id.txtEmailUser)
+        txtEmailLogin = findViewById(R.id.txtEmail)
         txtPass = findViewById(R.id.txtPassword)
+        txtRecuperarPass = findViewById(R.id.txtRecuperarPassword)
 
         btnLogingWithEmail.setOnClickListener {
             loginWithEmail()
@@ -48,6 +47,11 @@ class LoginActivity : AppCompatActivity() {
         }
 
         btnLogingGoogle.setOnClickListener { onClickGoogleLogIn() }
+
+        txtRecuperarPass.setOnClickListener {
+            val intent = Intent(this, ForgotPasswordActivity::class.java)
+            startActivity(intent)
+        }
 
     }
 

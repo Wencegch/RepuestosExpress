@@ -22,6 +22,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/filtro_producto"
+            android:imeOptions="actionDone"
             android:inputType="text" />
 
         <androidx.recyclerview.widget.RecyclerView

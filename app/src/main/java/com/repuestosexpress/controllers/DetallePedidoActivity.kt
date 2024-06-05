@@ -34,6 +34,7 @@ class DetallePedidoActivity : AppCompatActivity() {
     private lateinit var textoFecha: TextView
     private lateinit var textoEstado: TextView
     private lateinit var textoTotal: TextView
+    private lateinit var textoDireccion: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +43,7 @@ class DetallePedidoActivity : AppCompatActivity() {
         textoPedidoId = findViewById(R.id.txtDetallePedidoId)
         textoFecha = findViewById(R.id.txtDetallePedidoFecha)
         textoEstado = findViewById(R.id.txtDetallePedidoEstado)
+        textoDireccion = findViewById(R.id.txtDetallePedidoDireccion)
         textoTotal = findViewById(R.id.txtDetallePedidoPrecio)
         btnCancelar = findViewById(R.id.btn_CancelarPedido)
         recyclerView = findViewById(R.id.recyclerViewDetallePedido)
@@ -70,6 +72,7 @@ class DetallePedidoActivity : AppCompatActivity() {
             val fechapar = SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(pedido!!.fecha)
             textoFecha.text = getString(R.string.fecha, fechapar)
             textoEstado.text = getString(R.string.estado, pedido!!.estado)
+            textoDireccion.text = getString(R.string.direccion, pedido!!.direccion)
 
             // Obtener productos para las líneas de pedido
             obtenerProductosParaLineas()
@@ -106,17 +109,14 @@ class DetallePedidoActivity : AppCompatActivity() {
         var total = 0.0
 
         for (lineaPedido in pedidos) {
-            Firebase().obtenerProductoPorId(lineaPedido.idProducto) { producto ->
-                producto?.let {
-                    productos.add(it)
-                    total += it.precio * lineaPedido.cantidad
-                }
-                pendingCallbacks--
-                if (pendingCallbacks == 0) {
-                    detalleAdapter.notifyDataSetChanged()
-                    textoTotal.text = getString(R.string.total, total)
-                }
+            // Aquí no necesitamos hacer una llamada a obtenerProductoPorId, simplemente usamos el precio de la línea de pedido
+            total += lineaPedido.precio * lineaPedido.cantidad
+            pendingCallbacks--
+            if (pendingCallbacks == 0) {
+                detalleAdapter.notifyDataSetChanged()
+                textoTotal.text = getString(R.string.total, total)
             }
         }
     }
+
 }

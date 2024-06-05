@@ -19,10 +19,11 @@ import com.iamageo.library.title
 import com.iamageo.library.type
 import com.repuestosexpress.R
 import com.repuestosexpress.adapters.RecyclerAdapterCesta
+import com.repuestosexpress.components.PaymentShippingDetailsDialog
 import com.repuestosexpress.utils.Firebase
 import com.repuestosexpress.utils.Utils
 
-class CestaFragment : Fragment() {
+class CestaFragment : Fragment(), PaymentShippingDetailsDialog.PaymentShippingDetailsListener {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var cestaAdapter: RecyclerAdapterCesta
@@ -49,20 +50,28 @@ class CestaFragment : Fragment() {
         mostrarPantalla()
 
         btnTramitarPedido.setOnClickListener {
-            BeautifulDialog.build(requireContext() as Activity)
-                .title(getString(R.string.realizar_pedido), titleColor = R.color.black)
-                .description(getString(R.string.confirmacion_realizar_pedido))
-                .type(type = BeautifulDialog.TYPE.INFO)
-                .position(BeautifulDialog.POSITIONS.CENTER)
-                .onPositive(text = getString(android.R.string.ok), shouldIDismissOnClick = true) {
-                    val userUID = Utils.getPreferences(requireContext())
-                    Firebase().crearPedido(Utils.CONTROLAR_PEDIDOS, userUID) {
-                        Utils.Toast(requireContext(), getString(R.string.pedido_realizado))
-                        mostrarPantalla()
-                    }
-                }
-                .onNegative(text = getString(android.R.string.cancel)) {}
+            val dialog = PaymentShippingDetailsDialog()
+            dialog.setTargetFragment(this, 0)
+            dialog.show(parentFragmentManager, "PaymentShippingDialog")
         }
+    }
+
+    override fun onDialogConfirm(address: String, paymentMethod: String) {
+        // Aquí puedes manejar los datos recibidos del diálogo
+        // Por ejemplo, iniciar el proceso de crear el pedido
+        BeautifulDialog.build(requireContext() as Activity)
+            .title(getString(R.string.realizar_pedido), titleColor = R.color.black)
+            .description(getString(R.string.confirmacion_realizar_pedido))
+            .type(type = BeautifulDialog.TYPE.INFO)
+            .position(BeautifulDialog.POSITIONS.CENTER)
+            .onPositive(text = getString(android.R.string.ok), shouldIDismissOnClick = true) {
+                val userUID = Utils.getPreferences(requireContext())
+                Firebase().crearPedido(Utils.CONTROLAR_PEDIDOS, userUID, address) {
+                    Utils.Toast(requireContext(), getString(R.string.pedido_realizado))
+                    mostrarPantalla()
+                }
+            }
+            .onNegative(text = getString(android.R.string.cancel)) {}
     }
 
     fun calcularTotal(onTotalCalculated: (Double) -> Unit) {

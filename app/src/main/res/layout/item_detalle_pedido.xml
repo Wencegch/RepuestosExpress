@@ -15,7 +15,7 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/imageViewProductoHome"
+            android:id="@+id/imageViewProductoDetalle"
             android:layout_width="140dp"
             android:layout_height="112dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -27,23 +27,23 @@
             tools:srcCompat="@tools:sample/avatars" />
 
         <TextView
-            android:id="@+id/txtPrecioProductoHome"
+            android:id="@+id/txtPrecioProductoDetalle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Precio producto"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.507"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtNombreProductoHome" />
+            app:layout_constraintTop_toBottomOf="@+id/txtNombreProductoDetalle" />
 
         <TextView
-            android:id="@+id/txtNombreProductoHome"
+            android:id="@+id/txtNombreProductoDetalle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Nombre producto"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageViewProductoHome" />
+            app:layout_constraintTop_toBottomOf="@+id/imageViewProductoDetalle" />
 
         <TextView
             android:id="@+id/txtCantidadDetallePedido"
@@ -53,6 +53,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.504"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtPrecioProductoHome" />
+            app:layout_constraintTop_toBottomOf="@+id/txtPrecioProductoDetalle" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

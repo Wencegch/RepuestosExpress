@@ -63,4 +63,20 @@
     <string name="filtro_por_id">Buscar por Id</string>
     <string name="filtro_familia">Buscar familia</string>
     <string name="filtro_producto">Buscar producto</string>
+    <string name="contraseña_olvidada">He olvidado mi contraseña</string>
+    <string name="restablecer">Restablecer contraseña</string>
+    <string name="volver">Volver</string>
+    <string name="correo_recuperacion_enviado">Correo de recuperación enviado</string>
+    <string name="informacion_recuperacion_email">Indique la dirección de correo electrónico de la cuenta cuya contraseña desea restablecer:</string>
+    <string name="añadir_direccion_pago">Añadir dirección y método de pago</string>
+    <string name="direccion_envio">Dirección de envío</string>
+
+    <string-array name="metodos_pago">
+        <item>Reembolso</item>
+        <item>Transferencia</item>
+    </string-array>
+    <string name="metodo_pago">Método de pago</string>
+    <string name="direccion">Direccion: %1$s</string>
+
+
 </resources>

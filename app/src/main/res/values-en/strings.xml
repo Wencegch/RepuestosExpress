@@ -57,4 +57,13 @@
     <string name="filtro_por_id">Search by Id</string>
     <string name="filtro_familia">"Search family "</string>
     <string name="filtro_producto">Search product</string>
+    <string name="contraseña_olvidada">I have forgotten my password</string>
+    <string name="restablecer">Reset password</string>
+    <string name="volver">Back</string>
+    <string name="correo_recuperacion_enviado">Recovery mail sent</string>
+    <string name="informacion_recuperacion_email">Please enter the email address of the account whose password you wish to reset:</string>
+    <string name="añadir_direccion_pago">Add address and payment method</string>
+    <string name="direccion_envio">Shipping address</string>
+    <string name="metodo_pago">Method of payment</string>
+    <string name="direccion">Address: %1$s</string>
 </resources>

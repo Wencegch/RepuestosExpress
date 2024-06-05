@@ -29,7 +29,7 @@ class RecyclerAdapterDetallePedidos(private var lineasPedidos: ArrayList<LineasP
         Firebase().obtenerProductoPorId(lineasPedido.idProducto) { producto ->
             if (producto != null) {
                 holder.nombreDetallePedido.text = producto.nombre
-                val precio = producto.precio * lineasPedido.cantidad
+                val precio = lineasPedido.precio * lineasPedido.cantidad
                 holder.precioDetallePedido.text = holder.itemView.context.getString(R.string.precio_formato2, precio)
 
                 // Configuración del CircularProgressDrawable
@@ -64,10 +64,10 @@ class RecyclerAdapterDetallePedidos(private var lineasPedidos: ArrayList<LineasP
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val nombreDetallePedido: TextView = itemView.findViewById(R.id.txtNombreProductoHome)
-        val precioDetallePedido: TextView = itemView.findViewById(R.id.txtPrecioProductoHome)
+        val nombreDetallePedido: TextView = itemView.findViewById(R.id.txtNombreProductoDetalle)
+        val precioDetallePedido: TextView = itemView.findViewById(R.id.txtPrecioProductoDetalle)
         val cantidadDetallePedido: TextView = itemView.findViewById(R.id.txtCantidadDetallePedido)
-        val imagenDetallePedido: ImageView = itemView.findViewById(R.id.imageViewProductoHome)
+        val imagenDetallePedido: ImageView = itemView.findViewById(R.id.imageViewProductoDetalle)
     }
 
     fun getLineasPedido(pos: Int): LineasPedido {

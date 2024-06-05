@@ -8,18 +8,21 @@ class Pedido: Serializable {
     private var _usuario: String = ""
     private var _estado: String = ""
     private var _fecha: Date
+    private var _direccion: String = ""
 
-    constructor(id: String, usuario: String, estado: String, fecha: Date) {
+    constructor(id: String, usuario: String, estado: String, fecha: Date, direccion: String) {
         _id = id
         _usuario = usuario
         _estado = estado
         _fecha = fecha
+        _direccion = direccion
     }
 
-    constructor(usuario: String, estado: String, fecha: Date) {
+    constructor(usuario: String, estado: String, fecha: Date, direccion: String) {
         _usuario = usuario
         _estado = estado
         _fecha = fecha
+        _direccion = direccion
     }
 
     var id: String
@@ -46,4 +49,9 @@ class Pedido: Serializable {
             _fecha = value
         }
 
+    var direccion: String
+        get() = _direccion
+        set(value) {
+            _direccion = value
+        }
 }

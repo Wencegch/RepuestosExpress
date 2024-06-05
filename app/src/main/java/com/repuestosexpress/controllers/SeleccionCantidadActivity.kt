@@ -15,12 +15,13 @@ import com.iamageo.library.position
 import com.iamageo.library.title
 import com.iamageo.library.type
 import com.repuestosexpress.R
+import com.repuestosexpress.components.PaymentShippingDetailsDialog
 import com.repuestosexpress.models.LineasPedido
 import com.repuestosexpress.models.Producto
 import com.repuestosexpress.utils.Firebase
 import com.repuestosexpress.utils.Utils
 
-class SeleccionCantidadActivity : AppCompatActivity() {
+class SeleccionCantidadActivity : AppCompatActivity(), PaymentShippingDetailsDialog.PaymentShippingDetailsListener {
 
     private lateinit var progressDrawable: CircularProgressDrawable
     private lateinit var imageProduct: ImageView
@@ -84,33 +85,40 @@ class SeleccionCantidadActivity : AppCompatActivity() {
         }
 
         btnComprar.setOnClickListener {
-            BeautifulDialog.build(this)
-                .title(getString(R.string.realizar_pedido), titleColor = R.color.black)
-                .description(getString(R.string.confirmacion_realizar_pedido))
-                .type(type = BeautifulDialog.TYPE.INFO)
-                .position(BeautifulDialog.POSITIONS.CENTER)
-                .onPositive(text = getString(android.R.string.ok), shouldIDismissOnClick = true) {
-                    val userUID = Utils.getPreferences(this)
-                    Firebase().crearPedidoLinea(LineasPedido(producto?.id!!, quantity), userUID)
-                    Utils.Toast(this@SeleccionCantidadActivity, getString(R.string.pedido_realizado))
-                    finish()
-                }
-                .onNegative(text = getString(android.R.string.cancel)) {}
+            val dialog = PaymentShippingDetailsDialog()
+            dialog.show(supportFragmentManager, "PaymentShippingDialog")
         }
 
         btnAgregarCarrito.setOnClickListener {
-            Utils.CONTROLAR_PEDIDOS.add(LineasPedido(producto?.id!!, quantity))
+            Utils.CONTROLAR_PEDIDOS.add(LineasPedido(producto?.id!!, quantity, producto?.precio!!))
             Utils.Toast(this@SeleccionCantidadActivity, getString(R.string.producto_añadido))
             finish()
         }
     }
 
     private fun updateQuantityDisplay() {
-        textQuantity.text = getString(R.string.cantidad) + quantity
+        textQuantity.text = getString(R.string.cantidad_formato, quantity)
     }
 
     private fun updatePriceDisplay() {
         val precio = quantity * producto?.precio!!
         txtPrecio.text = getString(R.string.precio_formato2, precio)
+    }
+
+    override fun onDialogConfirm(address: String, paymentMethod: String) {
+        // Aquí puedes manejar los datos recibidos del diálogo
+        // Por ejemplo, iniciar el proceso de crear el pedido
+        BeautifulDialog.build(this)
+            .title(getString(R.string.realizar_pedido), titleColor = R.color.black)
+            .description(getString(R.string.confirmacion_realizar_pedido))
+            .type(type = BeautifulDialog.TYPE.INFO)
+            .position(BeautifulDialog.POSITIONS.CENTER)
+            .onPositive(text = getString(android.R.string.ok), shouldIDismissOnClick = true) {
+                val userUID = Utils.getPreferences(this)
+                Firebase().crearPedidoLinea(LineasPedido(producto?.id!!, quantity, producto?.precio!!), userUID, address)
+                Utils.Toast(this@SeleccionCantidadActivity, getString(R.string.pedido_realizado))
+                finish()
+            }
+            .onNegative(text = getString(android.R.string.cancel)) {}
     }
 }
