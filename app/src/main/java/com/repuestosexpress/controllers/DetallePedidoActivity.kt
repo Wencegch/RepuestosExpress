@@ -23,7 +23,11 @@ import com.repuestosexpress.utils.Firebase
 import com.repuestosexpress.utils.Utils
 import java.text.SimpleDateFormat
 
+/**
+ * DetallePedidoActivity muestra los detalles de un pedido seleccionado y permite cancelarlo.
+ */
 class DetallePedidoActivity : AppCompatActivity() {
+
     private var pedido: Pedido? = null
     private lateinit var recyclerView: RecyclerView
     private lateinit var detalleAdapter: RecyclerAdapterDetallePedidos
@@ -36,6 +40,10 @@ class DetallePedidoActivity : AppCompatActivity() {
     private lateinit var textoTotal: TextView
     private lateinit var textoDireccion: TextView
 
+    /**
+     * Método llamado cuando se crea la actividad.
+     * @param savedInstanceState Estado previamente guardado de la actividad.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detalle_pedido)
@@ -57,7 +65,7 @@ class DetallePedidoActivity : AppCompatActivity() {
         productos = ArrayList()
 
         recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        detalleAdapter = RecyclerAdapterDetallePedidos(pedidos) // Pasamos pedidos al adaptador
+        detalleAdapter = RecyclerAdapterDetallePedidos(pedidos)
         recyclerView.adapter = detalleAdapter
 
         pedido = intent.getSerializableExtra("pedido") as Pedido
@@ -74,7 +82,6 @@ class DetallePedidoActivity : AppCompatActivity() {
             textoEstado.text = getString(R.string.estado, pedido!!.estado)
             textoDireccion.text = getString(R.string.direccion, pedido!!.direccion)
 
-            // Obtener productos para las líneas de pedido
             obtenerProductosParaLineas()
         }
 
@@ -99,6 +106,9 @@ class DetallePedidoActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Obtiene los productos para las líneas de pedido y actualiza el total del pedido.
+     */
     private fun obtenerProductosParaLineas() {
         var pendingCallbacks = pedidos.size
         if (pendingCallbacks == 0) {
@@ -109,7 +119,6 @@ class DetallePedidoActivity : AppCompatActivity() {
         var total = 0.0
 
         for (lineaPedido in pedidos) {
-            // Aquí no necesitamos hacer una llamada a obtenerProductoPorId, simplemente usamos el precio de la línea de pedido
             total += lineaPedido.precio * lineaPedido.cantidad
             pendingCallbacks--
             if (pendingCallbacks == 0) {
@@ -118,5 +127,4 @@ class DetallePedidoActivity : AppCompatActivity() {
             }
         }
     }
-
 }

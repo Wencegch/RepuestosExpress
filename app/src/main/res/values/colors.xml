@@ -13,4 +13,11 @@
     <color name="green_menta">#98FB98</color>
     <color name="blue">#90CAF9</color>
     <color name="red">#801414</color>
+    <color name="dark_green">#388E3C</color>
+    <color name="dark_green_variant">#1B5E20</color>
+    <color name="dark_green_menta">#2E7D32</color>
+    <color name="dark_green_oliva">#33691E</color>
+    <color name="background_dark">#121212</color>
+    <color name="text_color_dark">#FFFFFF</color>
+    <color name="gray">#808080</color>
 </resources>

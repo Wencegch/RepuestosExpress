@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -19,13 +18,22 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.repuestosexpress.R
 import com.repuestosexpress.utils.Utils
 
+/**
+ * LoginActivity maneja el inicio de sesión de los usuarios mediante correo electrónico y Google.
+ */
 class LoginActivity : AppCompatActivity() {
+
     private lateinit var btnLogingGoogle: Button
     private lateinit var btnRegisterWithEmail: Button
     private lateinit var btnLogingWithEmail: Button
     private lateinit var txtEmailLogin: EditText
     private lateinit var txtPass: EditText
     private lateinit var txtRecuperarPass: TextView
+
+    /**
+     * Método llamado cuando se crea la actividad.
+     * @param savedInstanceState Estado previamente guardado de la actividad.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -52,12 +60,11 @@ class LoginActivity : AppCompatActivity() {
             val intent = Intent(this, ForgotPasswordActivity::class.java)
             startActivity(intent)
         }
-
     }
 
     /**
-     * Cuando se reinicia la app se comprueba que no haya usuario registrado
-     * En caso contrario esta actividad se salta
+     * Método llamado cuando la actividad se inicia y comprueba si hay un usuario registrado.
+     * Si hay un usuario registrado, se redirige a la actividad principal.
      */
     override fun onStart() {
         super.onStart()
@@ -71,31 +78,22 @@ class LoginActivity : AppCompatActivity() {
     }
 
     /**
-     * Metodo que recibe el token de la cuenta de google seleccionada
-     * y la registra en la base de datos de Firebase
+     * Método para manejar el resultado de la actividad que devuelve el token de inicio de sesión de Google.
      */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        //Confirma que la peticion venga del metodo GoogleLogIn
         if (requestCode == Utils.RC_SIGN_IN) {
-
-            //Recoge la cuenta de google asociada a los datos del intent
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
-                //Se intenta coger la cuenta
                 val account = task.getResult(ApiException::class.java)
                 if (account != null) {
-                    //Si la cuenta no es nula se recogen sus credenciales
                     val credential: AuthCredential = GoogleAuthProvider.getCredential(account.idToken, null)
 
-                    //Registramos las credenciales en FirebaseAuth
                     FirebaseAuth.getInstance().signInWithCredential(credential)
                         .addOnCompleteListener {
                             if (it.isSuccessful) {
-                                //Crear las preferencias
                                 Utils.createUserPrefs(this, it.result.user)
-                                //Llevar a main_activity
                                 mainIntent()
                             } else {
                                 Utils.Toast(this, getString(R.string.error))
@@ -109,7 +107,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     /**
-     * Metodo para iniciar sesion con una cuenta de google guardada en el dispositivo
+     * Método para iniciar sesión con una cuenta de Google.
      */
     private fun onClickGoogleLogIn() {
         val googleConf: GoogleSignInOptions =
@@ -118,26 +116,21 @@ class LoginActivity : AppCompatActivity() {
                 .requestEmail()
                 .build()
         val googleClient: GoogleSignInClient = GoogleSignIn.getClient(this, googleConf)
-        Log.d("usuario", "0")
         googleClient.signOut()
         startActivityForResult(googleClient.signInIntent, Utils.RC_SIGN_IN)
     }
 
     /**
-     * Método para iniciar sesión cuando YA TIENES un usuario CREADO en la BD
+     * Método para iniciar sesión con correo electrónico y contraseña.
      */
     private fun loginWithEmail() {
-        //Comprueba si el email está vacío
         if (txtEmailLogin.text.trim().isNotEmpty()) {
-            //Comprueba si la contraseña está vacía
             if (txtPass.text.trim().isNotEmpty()) {
-                //Inicio de sesión con el correo y la contraseña
                 FirebaseAuth.getInstance().signInWithEmailAndPassword(
                     txtEmailLogin.text.toString(),
                     txtPass.text.toString()
                 ).addOnSuccessListener {
                     Utils.Toast(this, getString(R.string.ok_credentials))
-                    //Utils.createUserPrefs(this, it.user)
                     mainIntent()
                 }.addOnFailureListener {
                     Utils.Toast(this, getString(R.string.bad_credentials))
@@ -151,7 +144,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     /**
-     * Método para enviar al usuario a la MainActivity
+     * Método para iniciar la actividad principal.
      */
     private fun mainIntent() {
         val intent = Intent(this, MainActivity::class.java)

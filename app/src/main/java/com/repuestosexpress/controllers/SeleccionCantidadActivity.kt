@@ -21,6 +21,9 @@ import com.repuestosexpress.models.Producto
 import com.repuestosexpress.utils.Firebase
 import com.repuestosexpress.utils.Utils
 
+/**
+ * SeleccionCantidadActivity es una actividad que permite al usuario seleccionar la cantidad de un producto y realizar una compra.
+ */
 class SeleccionCantidadActivity : AppCompatActivity(), PaymentShippingDetailsDialog.PaymentShippingDetailsListener {
 
     private lateinit var progressDrawable: CircularProgressDrawable
@@ -29,11 +32,16 @@ class SeleccionCantidadActivity : AppCompatActivity(), PaymentShippingDetailsDia
     private lateinit var buttonDecrease: Button
     private lateinit var btnComprar: Button
     private lateinit var btnAgregarCarrito: Button
+    private lateinit var txtNombreProd: TextView
     private lateinit var txtPrecio: TextView
     private lateinit var textQuantity: TextView
     private var quantity: Int = 1
     private var producto: Producto? = null
 
+    /**
+     * Método llamado cuando se crea la actividad.
+     * @param savedInstanceState Estado previamente guardado de la actividad.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_seleccion_cantidad)
@@ -46,6 +54,7 @@ class SeleccionCantidadActivity : AppCompatActivity(), PaymentShippingDetailsDia
         textQuantity = findViewById(R.id.textQuantityLabel)
         imageProduct = findViewById(R.id.imageViewSeleccionCantidad)
         txtPrecio = findViewById(R.id.txtPrecioCantidad)
+        txtNombreProd = findViewById(R.id.txtName)
 
         producto = intent.getSerializableExtra("Producto") as? Producto
 
@@ -65,6 +74,7 @@ class SeleccionCantidadActivity : AppCompatActivity(), PaymentShippingDetailsDia
                 .error(R.drawable.imagennoencontrada)
                 .into(imageProduct)
         }
+        txtNombreProd.text = producto?.nombre
 
         updateQuantityDisplay() // Inicializa la cantidad mostrada
         updatePriceDisplay() // Inicializa el precio mostrado
@@ -85,29 +95,40 @@ class SeleccionCantidadActivity : AppCompatActivity(), PaymentShippingDetailsDia
         }
 
         btnComprar.setOnClickListener {
+            // Abre el diálogo de detalles de pago y envío
             val dialog = PaymentShippingDetailsDialog()
             dialog.show(supportFragmentManager, "PaymentShippingDialog")
         }
 
         btnAgregarCarrito.setOnClickListener {
-            Utils.CONTROLAR_PEDIDOS.add(LineasPedido(producto?.id!!, quantity, producto?.precio!!))
+            // Agrega el producto a la cesta de compras
+            Utils.LISTA_PEDIDOS.add(LineasPedido(producto?.id!!, quantity, producto?.precio!!))
             Utils.Toast(this@SeleccionCantidadActivity, getString(R.string.producto_añadido))
             finish()
         }
     }
 
+    /**
+     * Actualiza la cantidad mostrada en la vista.
+     */
     private fun updateQuantityDisplay() {
         textQuantity.text = getString(R.string.cantidad_formato, quantity)
     }
 
+    /**
+     * Actualiza el precio mostrado en la vista.
+     */
     private fun updatePriceDisplay() {
         val precio = quantity * producto?.precio!!
         txtPrecio.text = getString(R.string.precio_formato2, precio)
     }
 
+    /**
+     * Método llamado cuando se confirma el diálogo de detalles de pago y envío.
+     * @param address La dirección proporcionada por el usuario.
+     * @param paymentMethod El método de pago seleccionado por el usuario.
+     */
     override fun onDialogConfirm(address: String, paymentMethod: String) {
-        // Aquí puedes manejar los datos recibidos del diálogo
-        // Por ejemplo, iniciar el proceso de crear el pedido
         BeautifulDialog.build(this)
             .title(getString(R.string.realizar_pedido), titleColor = R.color.black)
             .description(getString(R.string.confirmacion_realizar_pedido))

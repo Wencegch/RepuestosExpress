@@ -8,26 +8,37 @@ import androidx.preference.PreferenceManager
 import com.repuestosexpress.R
 import com.repuestosexpress.fragments.FragmentPreferences
 
+/**
+ * PreferencesActivity es una actividad que muestra las preferencias de la aplicación utilizando un fragmento.
+ */
 class PreferencesActivity : AppCompatActivity() {
+
+    /**
+     * Método llamado cuando se crea la actividad.
+     * @param savedInstanceState Estado previamente guardado de la actividad.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_preferences)
 
-        //reemplazamos el container de esta ventana por una instancia de fragments
+        // Reemplaza el contenedor de esta ventana por una instancia de FragmentPreferences
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.preferences_container, FragmentPreferences())
             .commit()
 
-        //boton para atras
-        val actionBar = supportActionBar
-        actionBar?.setDisplayHomeAsUpEnabled(true)
+        // Habilita el botón de retroceso en la barra de acción
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        //cargamos las preferencias
+        // Carga las preferencias de la aplicación
         loadPreferences()
     }
 
-    // Asociamos un oyente al evento de pulsar el icono de volver
+    /**
+     * Método para manejar la selección de elementos del menú.
+     * @param item El elemento del menú seleccionado.
+     * @return `true` si el evento fue manejado correctamente, `false` en caso contrario.
+     */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
@@ -38,13 +49,15 @@ class PreferencesActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    //Para cargar las preferencias
-    fun loadPreferences() {
+    /**
+     * Método para cargar las preferencias de la aplicación.
+     */
+    private fun loadPreferences() {
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
-        val colorFondo = sharedPreferences.getString("preferences_tema", "Light")
+        val colorFondo = sharedPreferences.getString("colorPreference", "Light")
         when (colorFondo) {
-            "Light" -> getDelegate().localNightMode = AppCompatDelegate.MODE_NIGHT_NO
-            "Night" -> getDelegate().localNightMode = AppCompatDelegate.MODE_NIGHT_YES
+            "Light" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            "Night" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         }
     }
 }

@@ -22,11 +22,23 @@ class PedidosFragment : Fragment() {
     private lateinit var viewPager2: ViewPager2
     private lateinit var viewAdapter: ViewPagerAdapter
 
+    /**
+     * Método llamado para crear la vista del fragmento.
+     * @param inflater El objeto LayoutInflater que se puede usar para inflar cualquier vista en el fragmento.
+     * @param container Si no es nulo, este es el padre de la vista del fragmento.
+     * @param savedInstanceState Si no es nulo, este fragmento está siendo reconstruido a partir de un estado guardado previamente como se indicó aquí.
+     * @return Retorna la vista raíz del fragmento.
+     */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflar el diseño del fragmento
         return inflater.inflate(R.layout.fragment_pedidos, container, false)
     }
 
+    /**
+     * Método llamado después de que la vista del fragmento haya sido creada.
+     * @param view La vista raíz del fragmento.
+     * @param savedInstanceState Si no es nulo, este fragmento está siendo reconstruido a partir de un estado guardado previamente como se indicó aquí.
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 

@@ -21,13 +21,23 @@ import com.iamageo.library.type
 import com.repuestosexpress.fragments.PedidosFragment
 import com.repuestosexpress.fragments.HomeFragment
 import com.repuestosexpress.R
+import com.repuestosexpress.components.PaymentShippingDetailsDialog
 import com.repuestosexpress.databinding.ActivityMainBinding
 import com.repuestosexpress.fragments.CestaFragment
 import com.repuestosexpress.fragments.RealizarPedidoFragment
+import com.repuestosexpress.utils.Firebase
+import com.repuestosexpress.utils.Utils
 
-class MainActivity : AppCompatActivity() {
+/**
+ * MainActivity es la actividad principal de la aplicación, que muestra diferentes fragmentos según la selección del usuario.
+ */
+class MainActivity : AppCompatActivity(), PaymentShippingDetailsDialog.PaymentShippingDetailsListener {
     private lateinit var binding: ActivityMainBinding
 
+    /**
+     * Método llamado cuando se crea la actividad.
+     * @param savedInstanceState Estado previamente guardado de la actividad.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -55,6 +65,11 @@ class MainActivity : AppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
+    /**
+     * Método llamado cuando se selecciona un elemento del menú.
+     * @param item El elemento del menú seleccionado.
+     * @return `true` si el evento fue manejado correctamente, `false` en caso contrario.
+     */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.btn_Settings -> {
@@ -63,69 +78,110 @@ class MainActivity : AppCompatActivity() {
             }
 
             R.id.btn_LogOut -> {
-                BeautifulDialog.build(this)
-                    .title(getString(R.string.logout_confirmation), titleColor = R.color.black)
-                    .description(getString(R.string.logout_description))
-                    .type(type = BeautifulDialog.TYPE.INFO)
-                    .position(BeautifulDialog.POSITIONS.CENTER)
-                    .onPositive(text = getString(android.R.string.ok), shouldIDismissOnClick = true) {
-                        FirebaseAuth.getInstance().signOut()
-                        exit()
-                    }
-                    .onNegative(text = getString(android.R.string.cancel)) {}
+                mostrarDialogConfirmacionSalida()
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
     /**
-     * Método llamado cuando se presiona el botón de retroceso.
+     * Método para manejar el botón de retroceso.
      */
-    @Deprecated("Deprecated in Java")
     @SuppressLint("MissingSuperCall")
     override fun onBackPressed() {
         val currentFragment = supportFragmentManager.findFragmentById(R.id.frame_layout)
 
-        // Si el fragmento actual es BookingsFragment o ProfileFragment, cambia al fragmento HomeFragment
+        // Si el fragmento actual es PedidosFragment, CestaFragment o RealizarPedidoFragment, cambia al fragmento HomeFragment
         if (currentFragment is PedidosFragment || currentFragment is CestaFragment || currentFragment is RealizarPedidoFragment) {
             replaceFragment(HomeFragment())
             // Cada vez que se presiona el botón de retroceso, se cambia el elemento seleccionado en el BottomNavigationView al elemento de inicio
             binding.bottomNavigation.selectedItemId = R.id.btn_Home
-        } else { onBackPressedDispatcher.onBackPressed() }
+        } else {
+            super.onBackPressed()
+        }
     }
 
     /**
-     * Reemplaza el fragmento actual en el contenedor (frame_layout) con el fragmento proporcionado.
+     * Método para reemplazar un fragmento en la actividad.
      * @param fragment El fragmento que se va a mostrar.
      */
     private fun replaceFragment(fragment: Fragment) {
-        val fragmentManager = supportFragmentManager
-        val fragmentTransaction = fragmentManager.beginTransaction()
+        val fragmentTransaction = supportFragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.frame_layout, fragment)
         fragmentTransaction.commit()
     }
+
+    /**
+     * Método para manejar el proceso de cierre de sesión.
+     */
+    private fun mostrarDialogConfirmacionSalida() {
+        BeautifulDialog.build(this)
+            .title(getString(R.string.logout_confirmation), titleColor = R.color.black)
+            .description(getString(R.string.logout_description))
+            .type(BeautifulDialog.TYPE.INFO)
+            .position(BeautifulDialog.POSITIONS.CENTER)
+            .onPositive(text = getString(android.R.string.ok), shouldIDismissOnClick = true) {
+                logout()
+            }
+            .onNegative(text = getString(android.R.string.cancel)) {}
+    }
+
+    /**
+     * Método para cerrar la sesión del usuario actual y redirigirlo a la pantalla de inicio de sesión.
+     */
+    private fun logout() {
+        FirebaseAuth.getInstance().signOut()
+        clearSharedPreferences()
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
+    /**
+     * Método para limpiar las preferencias compartidas.
+     */
+    private fun clearSharedPreferences() {
+        val prefs = this.getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
+        prefs.clear()
+        prefs.apply()
+    }
+
+    /**
+     * Método llamado cuando la actividad vuelve a estar en primer plano.
+     */
     override fun onResume() {
         super.onResume()
         loadPreferences()
     }
 
-    // Cierra la sesión del usuario y borra los ajustes de ese inicio de sesión para evitar entrar directamente
-    private fun exit() {
-        val prefs = this.getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
-        prefs.clear()
-        prefs.apply()
-        // Navega de vuelta a la actividad de inicio de sesión
-        val intent = Intent(this, LoginActivity::class.java)
-        startActivity(intent)
-        this.finish()
+    /**
+     * Método para cargar las preferencias del usuario.
+     */
+    private fun loadPreferences() {
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+        val colorFondo = sharedPreferences.getString("colorPreference", "Light")
+        when (colorFondo) {
+            "Light" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            "Night" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        }
     }
 
-    fun loadPreferences() {
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
-        val colorFondo = sharedPreferences.getString("preferences_tema", "Light")
-        when (colorFondo) {
-            "Light" -> getDelegate().localNightMode = AppCompatDelegate.MODE_NIGHT_NO
-            "Night" -> getDelegate().localNightMode = AppCompatDelegate.MODE_NIGHT_YES
-        }
+    override fun onDialogConfirm(address: String, paymentMethod: String) {
+        BeautifulDialog.build(this)
+            .title(getString(R.string.realizar_pedido), titleColor = R.color.black)
+            .description(getString(R.string.confirmacion_realizar_pedido))
+            .type(type = BeautifulDialog.TYPE.INFO)
+            .position(BeautifulDialog.POSITIONS.CENTER)
+            .onPositive(text = getString(android.R.string.ok), shouldIDismissOnClick = true) {
+                val userUID = Utils.getPreferences(this)
+                Firebase().crearPedido(Utils.LISTA_PEDIDOS, userUID, address) {
+                    Utils.Toast(this, getString(R.string.pedido_realizado))
+                    val currentFragment = supportFragmentManager.findFragmentById(R.id.frame_layout)
+                    if (currentFragment is CestaFragment) {
+                        currentFragment.mostrarPantalla()
+                    }
+                }
+            }
+            .onNegative(text = getString(android.R.string.cancel)) {}
     }
 }

@@ -2,10 +2,10 @@ package com.repuestosexpress.fragments
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.repuestosexpress.R
@@ -14,6 +14,9 @@ import com.repuestosexpress.controllers.SeleccionCantidadActivity
 import com.repuestosexpress.models.Producto
 import com.repuestosexpress.utils.Firebase
 
+/**
+ * Fragmento que muestra la página de inicio de la aplicación.
+ */
 class HomeFragment : Fragment() {
 
     private lateinit var sugerenciasAdapter: RecyclerAdapterHome
@@ -28,11 +31,23 @@ class HomeFragment : Fragment() {
     private lateinit var productosTopVentas: ArrayList<Producto>
     private lateinit var recyclerViewProductosTopVentas: RecyclerView
 
+    /**
+     * Método llamado para crear la vista del fragmento.
+     * @param inflater El objeto LayoutInflater que se puede usar para inflar cualquier vista en el fragmento.
+     * @param container Si no es nulo, este es el padre de la vista del fragmento.
+     * @param savedInstanceState Si no es nulo, este fragmento está siendo reconstruido a partir de un estado guardado previamente como se indicó aquí.
+     * @return Retorna la vista raíz del fragmento.
+     */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
+        // Inflar el diseño de este fragmento
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
+    /**
+     * Método llamado después de que la vista del fragmento haya sido creada.
+     * @param view La vista raíz del fragmento.
+     * @param savedInstanceState Si no es nulo, este fragmento está siendo reconstruido a partir de un estado guardado previamente como se indicó aquí.
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -63,6 +78,12 @@ class HomeFragment : Fragment() {
         }
     }
 
+    /**
+     * Configura el RecyclerView y su adaptador.
+     * @param recyclerView El RecyclerView a configurar.
+     * @param dataList La lista de datos para mostrar en el RecyclerView.
+     * @return Retorna el adaptador del RecyclerView.
+     */
     private fun configuracionRecyclerView(recyclerView: RecyclerView, dataList: ArrayList<Producto>): RecyclerAdapterHome {
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         val recyclerViewAdapter = RecyclerAdapterHome(dataList)
@@ -81,6 +102,12 @@ class HomeFragment : Fragment() {
         return recyclerViewAdapter
     }
 
+    /**
+     * Actualiza los datos del adaptador del RecyclerView.
+     * @param dataList La lista de datos actual que se va a actualizar.
+     * @param newData La nueva lista de datos.
+     * @param adapter El adaptador del RecyclerView a actualizar.
+     */
     private fun updateAdapterData(dataList: ArrayList<Producto>, newData: List<Producto>, adapter: RecyclerAdapterHome) {
         dataList.clear()
         dataList.addAll(newData)

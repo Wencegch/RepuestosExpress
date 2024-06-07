@@ -16,8 +16,8 @@
 
         <ImageView
             android:id="@+id/imageViewProductoHome"
-            android:layout_width="140dp"
-            android:layout_height="112dp"
+            android:layout_width="120dp"
+            android:layout_height="96dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -28,23 +28,29 @@
 
         <TextView
             android:id="@+id/txtPrecioProductoHome"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:gravity="center"
+            android:maxLines="1"
+            android:ellipsize="end"
             android:text="Precio producto"
             app:layout_constraintEnd_toEndOf="@id/imageViewProductoHome"
             app:layout_constraintStart_toStartOf="@id/imageViewProductoHome"
             app:layout_constraintTop_toBottomOf="@id/imageViewProductoHome"
-            app:layout_constraintVertical_bias="0.1" />
+            app:layout_constraintVertical_bias="0.05" />
 
         <TextView
             android:id="@+id/txtNombreProductoHome"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:gravity="center"
+            android:maxLines="2"
+            android:ellipsize="end"
             android:text="Nombre producto"
             app:layout_constraintEnd_toEndOf="@id/imageViewProductoHome"
             app:layout_constraintStart_toStartOf="@id/imageViewProductoHome"
             app:layout_constraintTop_toBottomOf="@id/txtPrecioProductoHome"
-            app:layout_constraintVertical_bias="0.1" />
+            app:layout_constraintVertical_bias="0.05" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

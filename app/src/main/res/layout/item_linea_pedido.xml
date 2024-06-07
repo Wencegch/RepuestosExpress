@@ -28,7 +28,7 @@
 
         <TextView
             android:id="@+id/txtNombreProductoLinea"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Nombre producto"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -40,19 +40,19 @@
 
         <TextView
             android:id="@+id/txtPrecioProductoLinea"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Precio producto"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.172"
             app:layout_constraintStart_toStartOf="@+id/guideline4"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.423" />
+            app:layout_constraintTop_toBottomOf="@+id/txtNombreProductoLinea"
+            app:layout_constraintVertical_bias="0.157" />
 
         <TextView
             android:id="@+id/txtCantidadProducto"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Cantidad Producto"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -60,11 +60,11 @@
             app:layout_constraintHorizontal_bias="0.222"
             app:layout_constraintStart_toStartOf="@+id/guideline4"
             app:layout_constraintTop_toBottomOf="@+id/txtPrecioProductoLinea"
-            app:layout_constraintVertical_bias="0.244" />
+            app:layout_constraintVertical_bias="0.285" />
 
         <TextView
             android:id="@+id/txtEliminar"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/eliminar"
             android:textColor="#03A9F4"
@@ -72,8 +72,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.108"
             app:layout_constraintStart_toStartOf="@+id/guideline4"
-            app:layout_constraintTop_toBottomOf="@+id/txtPrecioProductoLinea"
-            app:layout_constraintVertical_bias="0.844" />
+            app:layout_constraintTop_toBottomOf="@+id/txtCantidadProducto"
+            app:layout_constraintVertical_bias="0.708" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline4"
