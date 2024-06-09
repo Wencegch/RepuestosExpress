@@ -611,21 +611,31 @@ class Firebase {
      * @param nombre Nombre del usuario que se va a crear.
      * @param uid Identificador único del usuario proporcionado por Firebase Authentication.
      */
-    fun crearUsuario(email: String, nombre: String, uid: String){
-        val datosUsuario: MutableMap<String, Any> = HashMap()
+    fun crearUsuario(email: String, nombre: String, uid: String) {
+        // Verificar si el usuario ya existe en la base de datos
+        referenceUsuarios.whereEqualTo("email", email).get()
+            .addOnSuccessListener { querySnapshot ->
+                if (querySnapshot.isEmpty) {
+                    // Si el usuario no existe, crearlo
+                    val datosUsuario: MutableMap<String, Any> = HashMap()
+                    datosUsuario["email"] = email
+                    datosUsuario["nombre"] = nombre
+                    datosUsuario["uid"] = uid
+                    datosUsuario["administrador"] = false
 
-        datosUsuario["email"] = email
-        datosUsuario["nombre"] = nombre
-        datosUsuario["uid"] = uid
-        datosUsuario["administrador"] = false
-
-        referenceUsuarios.add(datosUsuario)
-            .addOnSuccessListener { documentReference ->
-                val id: String = documentReference.id
-                Log.i("Crear usuario", "Exitoso. ID del usuario: $id")
+                    referenceUsuarios.add(datosUsuario).addOnSuccessListener { documentReference ->
+                        val id: String = documentReference.id
+                        Log.i("Crear usuario", "Exitoso. ID del usuario: $id")
+                    }.addOnFailureListener { exception ->
+                        Log.e("Error", "$exception")
+                    }
+                } else {
+                    // Si el usuario ya existe, simplemente iniciar sesión
+                    Log.i("Crear usuario", "El usuario ya existe en la base de datos.")
+                }
             }
             .addOnFailureListener { exception ->
-                Log.e("Error", "$exception")
+                Log.e("Error", "Error al verificar el usuario: $exception")
             }
     }
 

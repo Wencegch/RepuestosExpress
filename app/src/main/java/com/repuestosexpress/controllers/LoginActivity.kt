@@ -79,6 +79,20 @@ class LoginActivity : AppCompatActivity() {
     }
 
     /**
+     * Método para iniciar sesión con una cuenta de Google.
+     */
+    private fun onClickGoogleLogIn() {
+        val googleConf: GoogleSignInOptions =
+            GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.web_client_id))
+                .requestEmail()
+                .build()
+        val googleClient: GoogleSignInClient = GoogleSignIn.getClient(this, googleConf)
+        googleClient.signOut()
+        startActivityForResult(googleClient.signInIntent, Utils.RC_SIGN_IN)
+    }
+
+    /**
      * Método para manejar el resultado de la actividad que devuelve el token de inicio de sesión de Google.
      */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -114,21 +128,6 @@ class LoginActivity : AppCompatActivity() {
                 Utils.Toast(this, "API Error")
             }
         }
-    }
-
-
-    /**
-     * Método para iniciar sesión con una cuenta de Google.
-     */
-    private fun onClickGoogleLogIn() {
-        val googleConf: GoogleSignInOptions =
-            GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.web_client_id))
-                .requestEmail()
-                .build()
-        val googleClient: GoogleSignInClient = GoogleSignIn.getClient(this, googleConf)
-        googleClient.signOut()
-        startActivityForResult(googleClient.signInIntent, Utils.RC_SIGN_IN)
     }
 
     /**
