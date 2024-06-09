@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.repuestosexpress.R
+import com.repuestosexpress.utils.Firebase
 import com.repuestosexpress.utils.Utils
 
 /**
@@ -69,10 +70,11 @@ class SignUpActivity : AppCompatActivity() {
                                             Utils.Toast(
                                                 this,
                                                 getString(R.string.user) + " " + user.displayName + " " + getString(
-                                                    R.string.created
-                                                )
+                                                    R.string.created)
                                             )
                                             Utils.createUserPrefs(this, it.user)
+                                            Firebase().crearUsuario(txtEmail.text.toString(), txtNameUser.text.toString(),
+                                                Utils.getPreferences(this))
                                             val intent = Intent(this, MainActivity::class.java)
                                             startActivity(intent)
                                             finish() // Finaliza la actividad actual después de iniciar sesión correctamente

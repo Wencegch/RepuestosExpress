@@ -18,7 +18,7 @@ class Firebase {
     private var referenceFamilias = FirebaseFirestore.getInstance().collection("Familias")
     private var referenceProductos = FirebaseFirestore.getInstance().collection("Productos")
     private var referencePedidos = FirebaseFirestore.getInstance().collection("Pedidos")
-
+    private var referenceUsuarios = FirebaseFirestore.getInstance().collection("Usuarios")
     /**
      * Recupera todas las familias de productos almacenadas en Firestore.
      *
@@ -603,4 +603,30 @@ class Firebase {
                 onComplete(emptyList())
             }
     }
+
+    /**
+     * Crea un nuevo usuario en la base de datos de Firestore.
+     *
+     * @param email Correo electrónico del usuario que se va a crear.
+     * @param nombre Nombre del usuario que se va a crear.
+     * @param uid Identificador único del usuario proporcionado por Firebase Authentication.
+     */
+    fun crearUsuario(email: String, nombre: String, uid: String){
+        val datosUsuario: MutableMap<String, Any> = HashMap()
+
+        datosUsuario["email"] = email
+        datosUsuario["nombre"] = nombre
+        datosUsuario["uid"] = uid
+        datosUsuario["administrador"] = false
+
+        referenceUsuarios.add(datosUsuario)
+            .addOnSuccessListener { documentReference ->
+                val id: String = documentReference.id
+                Log.i("Crear usuario", "Exitoso. ID del usuario: $id")
+            }
+            .addOnFailureListener { exception ->
+                Log.e("Error", "$exception")
+            }
+    }
+
 }

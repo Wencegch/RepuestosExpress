@@ -16,6 +16,7 @@ import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.repuestosexpress.R
+import com.repuestosexpress.utils.Firebase
 import com.repuestosexpress.utils.Utils
 
 /**
@@ -93,8 +94,17 @@ class LoginActivity : AppCompatActivity() {
                     FirebaseAuth.getInstance().signInWithCredential(credential)
                         .addOnCompleteListener {
                             if (it.isSuccessful) {
-                                Utils.createUserPrefs(this, it.result.user)
-                                mainIntent()
+                                val user = it.result.user
+                                val email = user?.email
+                                val uid = user?.uid
+                                val name = email?.substringBefore("@")
+
+                                if (email != null && name != null && uid != null) {
+                                    Firebase().crearUsuario(email, name, uid)
+                                    Utils.createUserPrefs(this, user)
+                                    Utils.Toast(this, getString(R.string.user) +" " +  name + " " + getString(R.string.created))
+                                    mainIntent()
+                                }
                             } else {
                                 Utils.Toast(this, getString(R.string.error))
                             }
@@ -105,6 +115,7 @@ class LoginActivity : AppCompatActivity() {
             }
         }
     }
+
 
     /**
      * Método para iniciar sesión con una cuenta de Google.
