@@ -272,7 +272,7 @@ class Firebase {
      * @param onComplete Callback que se llama cuando se completa la creación del pedido y todas sus líneas de pedido.
      *                   No recibe argumentos.
      */
-    fun crearPedido(lineasPedidos: ArrayList<LineasPedido>, user: String, direccion: String, onComplete: () -> Unit) {
+    fun crearPedido(lineasPedidos: ArrayList<LineasPedido>, user: String, direccion: String, metodoPago: String, onComplete: () -> Unit) {
         // Crear un mapa mutable para almacenar los datos del pedido
         val datosPedido: MutableMap<String, Any> = HashMap()
         // Obtener la fecha y hora actuales
@@ -283,6 +283,7 @@ class Firebase {
         datosPedido["fecha"] = fechaActual
         datosPedido["estado"] = "Pendiente"
         datosPedido["direccion"] = direccion
+        datosPedido["metodoPago"] = metodoPago
 
         // Agregar el pedido a la colección de pedidos en Firestore
         referencePedidos
@@ -368,7 +369,7 @@ class Firebase {
      * @param user Usuario asociado al pedido.
      * @param direccion Dirección de envío del pedido.
      */
-    fun crearPedidoLinea(lineaPedido: LineasPedido, user: String, direccion: String) {
+    fun crearPedidoLinea(lineaPedido: LineasPedido, user: String, direccion: String, metodoPago: String) {
         // Crear un mapa mutable para almacenar los datos del pedido
         val datosPedido: MutableMap<String, Any> = HashMap()
         // Obtener la fecha y hora actuales
@@ -379,6 +380,7 @@ class Firebase {
         datosPedido["fecha"] = fechaActual
         datosPedido["estado"] = "Pendiente"
         datosPedido["direccion"] = direccion
+        datosPedido["metodoPago"] = metodoPago
 
         // Agregar el pedido a la colección de pedidos en Firestore
         referencePedidos
@@ -449,11 +451,12 @@ class Firebase {
                     val estado = document.getString("estado")
                     val fecha = document.getDate("fecha")
                     val direccion = document.getString("direccion")
+                    val metodoPago = document.getString("metodoPago")
 
                     // Verificar si los campos requeridos no son nulos
-                    if (estado != null && fecha != null && direccion != null) {
+                    if (estado != null && fecha != null && direccion != null && metodoPago != null) {
                         // Crear un objeto Pedido y agregarlo a la lista de pedidos pendientes
-                        val pedido = Pedido(idPedido, user, estado, fecha, direccion)
+                        val pedido = Pedido(idPedido, user, estado, fecha, direccion, metodoPago)
                         listaPedidos.add(pedido)
                     }
                 }
@@ -492,11 +495,12 @@ class Firebase {
                     val estado = document.getString("estado")
                     val fecha = document.getDate("fecha")
                     val direccion = document.getString("direccion")
+                    val metodoPago = document.getString("metodoPago")
 
                     // Verificar si los campos requeridos no son nulos
-                    if (estado != null && fecha != null && direccion != null) {
+                    if (estado != null && fecha != null && direccion != null && metodoPago != null) {
                         // Crear un objeto Pedido y agregarlo a la lista de pedidos finalizados
-                        val pedido = Pedido(idPedido, user, estado, fecha, direccion)
+                        val pedido = Pedido(idPedido, user, estado, fecha, direccion, metodoPago)
                         listaPedidos.add(pedido)
                     }
                 }

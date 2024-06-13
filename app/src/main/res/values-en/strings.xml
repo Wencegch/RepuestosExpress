@@ -64,6 +64,7 @@
     <string name="informacion_recuperacion_email">Please enter the email address of the account whose password you wish to reset:</string>
     <string name="añadir_direccion_pago">Add address and payment method</string>
     <string name="direccion_envio">Shipping address</string>
-    <string name="metodo_pago">Method of payment</string>
+    <string name="detalle_metodo_pago">Method of payment: %1$s</string>
     <string name="direccion">Address: %1$s</string>
+    <string name="metodo_pago">Method of payment</string>
 </resources>

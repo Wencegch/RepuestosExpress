@@ -136,7 +136,7 @@ class SeleccionCantidadActivity : AppCompatActivity(), PaymentShippingDetailsDia
             .position(BeautifulDialog.POSITIONS.CENTER)
             .onPositive(text = getString(android.R.string.ok), shouldIDismissOnClick = true) {
                 val userUID = Utils.getPreferences(this)
-                Firebase().crearPedidoLinea(LineasPedido(producto?.id!!, quantity, producto?.precio!!), userUID, address)
+                Firebase().crearPedidoLinea(LineasPedido(producto?.id!!, quantity, producto?.precio!!), userUID, address, paymentMethod)
                 Utils.Toast(this@SeleccionCantidadActivity, getString(R.string.pedido_realizado))
                 finish()
             }

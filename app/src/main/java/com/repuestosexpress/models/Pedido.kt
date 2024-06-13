@@ -10,6 +10,7 @@ import java.util.Date
  * @property _estado El estado actual del pedido.
  * @property _fecha La fecha en la que se realizó el pedido.
  * @property _direccion La dirección de envío del pedido.
+ * @property _metodoPago El método de pago del pedido.
  * @constructor Crea una nueva instancia de la clase Pedido.
  */
 class Pedido: Serializable {
@@ -18,6 +19,7 @@ class Pedido: Serializable {
     private var _estado: String = ""
     private var _fecha: Date
     private var _direccion: String = ""
+    private var _metodoPago: String = ""
 
     /**
      * Constructor primario para crear una instancia de Pedido con todos los parámetros.
@@ -26,13 +28,15 @@ class Pedido: Serializable {
      * @param estado El estado actual del pedido.
      * @param fecha La fecha en la que se realizó el pedido.
      * @param direccion La dirección de envío del pedido.
+     * @param metodoPago El método de pago del pedido.
      */
-    constructor(id: String, usuario: String, estado: String, fecha: Date, direccion: String) {
+    constructor(id: String, usuario: String, estado: String, fecha: Date, direccion: String, metodoPago: String) {
         _id = id
         _usuario = usuario
         _estado = estado
         _fecha = fecha
         _direccion = direccion
+        _metodoPago = metodoPago
     }
 
     /**
@@ -42,15 +46,16 @@ class Pedido: Serializable {
      * @param fecha La fecha en la que se realizó el pedido.
      * @param direccion La dirección de envío del pedido.
      */
-    constructor(usuario: String, estado: String, fecha: Date, direccion: String) {
+    constructor(usuario: String, estado: String, fecha: Date, direccion: String, metodoPago: String) {
         _usuario = usuario
         _estado = estado
         _fecha = fecha
         _direccion = direccion
+        _metodoPago = metodoPago
     }
 
     /**
-     * Propiedad para acceder y modificar el identificador único del pedido.
+     * Getter y Setter para el ID del pedido.
      */
     var id: String
         get() = _id
@@ -59,7 +64,7 @@ class Pedido: Serializable {
         }
 
     /**
-     * Propiedad para acceder y modificar el usuario que realizó el pedido.
+     * Getter y Setter para el usuario que realizó el pedido.
      */
     var usuario: String
         get() = _usuario
@@ -68,7 +73,7 @@ class Pedido: Serializable {
         }
 
     /**
-     * Propiedad para acceder y modificar el estado actual del pedido.
+     * Getter y Setter para el estado actual del pedido.
      */
     var estado: String
         get() = _estado
@@ -77,7 +82,7 @@ class Pedido: Serializable {
         }
 
     /**
-     * Propiedad para acceder y modificar la fecha en la que se realizó el pedido.
+     * Getter y Setter para la fecha en la que se realizó el pedido.
      */
     var fecha: Date
         get() = _fecha
@@ -86,11 +91,20 @@ class Pedido: Serializable {
         }
 
     /**
-     * Propiedad para acceder y modificar la dirección de envío del pedido.
+     * Getter y Setter para la dirección de envío del pedido.
      */
     var direccion: String
         get() = _direccion
         set(value) {
             _direccion = value
+        }
+
+    /**
+     * Getter y Setter para el método de pago del pedido.
+     */
+    var metodoPago: String
+        get() = _metodoPago
+        set(value) {
+            _metodoPago = value
         }
 }

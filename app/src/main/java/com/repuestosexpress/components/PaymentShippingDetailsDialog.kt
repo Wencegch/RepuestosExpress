@@ -68,7 +68,7 @@ class PaymentShippingDetailsDialog : DialogFragment() {
         btnConfirmar.setOnClickListener {
             val address = editDireccionEnvio.text.toString()
             if (address.isBlank()) {
-                editDireccionEnvio.error = "La dirección no puede estar vacía"
+                editDireccionEnvio.error = getString(R.string.required)
             } else {
                 listener?.onDialogConfirm(address, spinnerMetodoPago.selectedItem.toString())
                 dialog.dismiss()

@@ -75,8 +75,9 @@
         <item>Reembolso</item>
         <item>Transferencia</item>
     </string-array>
-    <string name="metodo_pago">Método de pago</string>
+    <string name="detalle_metodo_pago">Método de pago: %1$s</string>
     <string name="direccion">Direccion: %1$s</string>
+    <string name="metodo_pago">Método de pago</string>
 
 
 </resources>

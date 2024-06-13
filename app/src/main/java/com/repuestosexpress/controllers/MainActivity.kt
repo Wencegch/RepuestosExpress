@@ -72,11 +72,6 @@ class MainActivity : AppCompatActivity(), PaymentShippingDetailsDialog.PaymentSh
      */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.btn_Settings -> {
-                val intent = Intent(this, PreferencesActivity::class.java)
-                startActivity(intent)
-            }
-
             R.id.btn_LogOut -> {
                 mostrarDialogConfirmacionSalida()
             }
@@ -174,7 +169,7 @@ class MainActivity : AppCompatActivity(), PaymentShippingDetailsDialog.PaymentSh
             .position(BeautifulDialog.POSITIONS.CENTER)
             .onPositive(text = getString(android.R.string.ok), shouldIDismissOnClick = true) {
                 val userUID = Utils.getPreferences(this)
-                Firebase().crearPedido(Utils.LISTA_PEDIDOS, userUID, address) {
+                Firebase().crearPedido(Utils.LISTA_PEDIDOS, userUID, address, paymentMethod) {
                     Utils.Toast(this, getString(R.string.pedido_realizado))
                     val currentFragment = supportFragmentManager.findFragmentById(R.id.frame_layout)
                     if (currentFragment is CestaFragment) {

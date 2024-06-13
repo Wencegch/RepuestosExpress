@@ -37,8 +37,9 @@ class DetallePedidoActivity : AppCompatActivity() {
     private lateinit var textoPedidoId: TextView
     private lateinit var textoFecha: TextView
     private lateinit var textoEstado: TextView
-    private lateinit var textoTotal: TextView
     private lateinit var textoDireccion: TextView
+    private lateinit var textoMetodoPago: TextView
+    private lateinit var textoTotal: TextView
 
     /**
      * Método llamado cuando se crea la actividad.
@@ -52,6 +53,7 @@ class DetallePedidoActivity : AppCompatActivity() {
         textoFecha = findViewById(R.id.txtDetallePedidoFecha)
         textoEstado = findViewById(R.id.txtDetallePedidoEstado)
         textoDireccion = findViewById(R.id.txtDetallePedidoDireccion)
+        textoMetodoPago = findViewById(R.id.txtDetallePedidoMetodoPago)
         textoTotal = findViewById(R.id.txtDetallePedidoPrecio)
         btnCancelar = findViewById(R.id.btn_CancelarPedido)
         recyclerView = findViewById(R.id.recyclerViewDetallePedido)
@@ -81,7 +83,7 @@ class DetallePedidoActivity : AppCompatActivity() {
             textoFecha.text = getString(R.string.fecha, fechapar)
             textoEstado.text = getString(R.string.estado, pedido!!.estado)
             textoDireccion.text = getString(R.string.direccion, pedido!!.direccion)
-
+            textoMetodoPago.text = getString(R.string.detalle_metodo_pago, pedido!!.metodoPago)
             obtenerProductosParaLineas()
         }
 
