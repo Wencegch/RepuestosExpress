@@ -1,8 +1,10 @@
 package com.repuestosexpress.utils
 
+import android.content.Context
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.repuestosexpress.R
 import com.repuestosexpress.models.Familia
 import com.repuestosexpress.models.LineasPedido
 import com.repuestosexpress.models.Pedido
@@ -19,6 +21,7 @@ class Firebase {
     private var referenceProductos = FirebaseFirestore.getInstance().collection("Productos")
     private var referencePedidos = FirebaseFirestore.getInstance().collection("Pedidos")
     private var referenceUsuarios = FirebaseFirestore.getInstance().collection("Usuarios")
+
     /**
      * Recupera todas las familias de productos almacenadas en Firestore.
      *
@@ -269,6 +272,7 @@ class Firebase {
      * @param lineasPedidos Lista de objetos LineasPedido que representan las líneas de pedido que se agregarán al pedido.
      * @param user Usuario asociado al pedido.
      * @param direccion Dirección de envío del pedido.
+     * @param metodoPago Método de pago del pedido.
      * @param onComplete Callback que se llama cuando se completa la creación del pedido y todas sus líneas de pedido.
      *                   No recibe argumentos.
      */
@@ -368,6 +372,7 @@ class Firebase {
      * @param lineaPedido Objeto LineasPedido que representa la línea de pedido que se agregará al pedido.
      * @param user Usuario asociado al pedido.
      * @param direccion Dirección de envío del pedido.
+     * @param metodoPago Método de pago del pedido.
      */
     fun crearPedidoLinea(lineaPedido: LineasPedido, user: String, direccion: String, metodoPago: String) {
         // Crear un mapa mutable para almacenar los datos del pedido
@@ -611,11 +616,12 @@ class Firebase {
     /**
      * Crea un nuevo usuario en la base de datos de Firestore.
      *
+     * @param context Contexto de la aplicación.
      * @param email Correo electrónico del usuario que se va a crear.
      * @param nombre Nombre del usuario que se va a crear.
      * @param uid Identificador único del usuario proporcionado por Firebase Authentication.
      */
-    fun crearUsuario(email: String, nombre: String, uid: String) {
+    fun crearUsuario(context: Context, email: String, nombre: String, uid: String) {
         // Verificar si el usuario ya existe en la base de datos
         referenceUsuarios.whereEqualTo("email", email).get()
             .addOnSuccessListener { querySnapshot ->
@@ -629,6 +635,7 @@ class Firebase {
 
                     referenceUsuarios.add(datosUsuario).addOnSuccessListener { documentReference ->
                         val id: String = documentReference.id
+                        Utils.Toast(context, context.getString(R.string.user) +" " +  nombre + " " + context.getString(R.string.created))
                         Log.i("Crear usuario", "Exitoso. ID del usuario: $id")
                     }.addOnFailureListener { exception ->
                         Log.e("Error", "$exception")

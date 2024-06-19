@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -114,9 +115,8 @@ class LoginActivity : AppCompatActivity() {
                                 val name = email?.substringBefore("@")
 
                                 if (email != null && name != null && uid != null) {
-                                    Firebase().crearUsuario(email, name, uid)
+                                    Firebase().crearUsuario(this, email, name, uid)
                                     Utils.createUserPrefs(this, user)
-                                    Utils.Toast(this, getString(R.string.user) +" " +  name + " " + getString(R.string.created))
                                     mainIntent()
                                 }
                             } else {
@@ -124,8 +124,8 @@ class LoginActivity : AppCompatActivity() {
                             }
                         }
                 }
-            } catch (e: ApiException) {
-                Utils.Toast(this, "API Error")
+            } catch (exception: ApiException) {
+                Log.e("Error", "$exception")
             }
         }
     }

@@ -36,7 +36,6 @@ class SignUpActivity : AppCompatActivity() {
         txtRepeatPass = findViewById(R.id.txtConfirmPassword)
         btnRegistrar = findViewById(R.id.btn_Register)
 
-        // Configuración del botón de registro
         btnRegistrar.setOnClickListener { registerWithEmail() }
     }
 
@@ -67,13 +66,8 @@ class SignUpActivity : AppCompatActivity() {
                                     ?.addOnCompleteListener { profileUpdateTask ->
                                         if (profileUpdateTask.isSuccessful) {
                                             // El perfil del usuario se actualizó correctamente
-                                            Utils.Toast(
-                                                this,
-                                                getString(R.string.user) + " " + user.displayName + " " + getString(
-                                                    R.string.created)
-                                            )
                                             Utils.createUserPrefs(this, it.user)
-                                            Firebase().crearUsuario(txtEmail.text.toString(), txtNameUser.text.toString(),
+                                            Firebase().crearUsuario(this, txtEmail.text.toString(), txtNameUser.text.toString(),
                                                 Utils.getPreferences(this))
                                             val intent = Intent(this, MainActivity::class.java)
                                             startActivity(intent)

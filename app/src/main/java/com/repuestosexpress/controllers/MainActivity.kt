@@ -7,9 +7,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
-import androidx.preference.PreferenceManager
 import com.google.firebase.auth.FirebaseAuth
 import com.iamageo.library.BeautifulDialog
 import com.iamageo.library.description
@@ -139,26 +137,6 @@ class MainActivity : AppCompatActivity(), PaymentShippingDetailsDialog.PaymentSh
         val prefs = this.getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
         prefs.clear()
         prefs.apply()
-    }
-
-    /**
-     * Método llamado cuando la actividad vuelve a estar en primer plano.
-     */
-    override fun onResume() {
-        super.onResume()
-        loadPreferences()
-    }
-
-    /**
-     * Método para cargar las preferencias del usuario.
-     */
-    private fun loadPreferences() {
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
-        val colorFondo = sharedPreferences.getString("colorPreference", "Light")
-        when (colorFondo) {
-            "Light" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            "Night" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        }
     }
 
     override fun onDialogConfirm(address: String, paymentMethod: String) {
