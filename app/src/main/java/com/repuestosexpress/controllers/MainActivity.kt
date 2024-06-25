@@ -80,17 +80,17 @@ class MainActivity : AppCompatActivity(), PaymentShippingDetailsDialog.PaymentSh
     /**
      * Método para manejar el botón de retroceso.
      */
+    @Deprecated("Deprecated in Java")
     @SuppressLint("MissingSuperCall")
     override fun onBackPressed() {
         val currentFragment = supportFragmentManager.findFragmentById(R.id.frame_layout)
 
         // Si el fragmento actual es PedidosFragment, CestaFragment o RealizarPedidoFragment, cambia al fragmento HomeFragment
         if (currentFragment is PedidosFragment || currentFragment is CestaFragment || currentFragment is RealizarPedidoFragment) {
-            replaceFragment(HomeFragment())
             // Cada vez que se presiona el botón de retroceso, se cambia el elemento seleccionado en el BottomNavigationView al elemento de inicio
             binding.bottomNavigation.selectedItemId = R.id.btn_Home
         } else {
-            super.onBackPressed()
+            onBackPressedDispatcher.onBackPressed()
         }
     }
 

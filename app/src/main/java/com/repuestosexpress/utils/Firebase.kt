@@ -33,7 +33,8 @@ class Firebase {
         val listaFamilias = mutableListOf<Familia>()
 
         // Obtener todos los documentos de la colección "Familias" en Firestore
-        referenceFamilias.get().addOnSuccessListener { querySnapshot ->
+        referenceFamilias.whereEqualTo("eliminado", false)
+            .get().addOnSuccessListener { querySnapshot ->
             // Iterar sobre los documentos recuperados
             for (document in querySnapshot.documents) {
                 // Extraer campos del documento
@@ -165,9 +166,10 @@ class Firebase {
                     val precio = document.getDouble("precio")
                     val imgUrl = document.getString("imgUrl")
                     val idFamilia = document.getString("idFamilia")
+                    val eliminado = document.getBoolean("eliminado")
 
-                    // Verificar si los campos necesarios no son nulos
-                    if (nombre != null && precio != null && imgUrl != null && idFamilia != null) {
+                    // Verificar si los campos necesarios no son nulos y el producto no está eliminado
+                    if (nombre != null && precio != null && imgUrl != null && idFamilia != null && eliminado == false) {
                         // Crear un objeto Producto y agregarlo a la lista de productos nuevos
                         val producto = Producto(idProducto, nombre, precio.toDouble(), imgUrl, idFamilia)
                         listaNovedades.add(producto)
